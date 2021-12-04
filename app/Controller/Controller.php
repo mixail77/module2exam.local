@@ -44,4 +44,13 @@ class Controller
 
     }
 
+    public function error404()
+    {
+
+        $this->flash->error('404 Not Found');
+
+        echo $this->engine->render('error404.view', []);
+
+    }
+
 }

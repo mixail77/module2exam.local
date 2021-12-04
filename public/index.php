@@ -1,5 +1,6 @@
 <?php
 
+use App\Controller\Controller;
 use App\Controller\AuthController;
 use App\Controller\UserController;
 use App\Controller\RegisterController;
@@ -19,7 +20,6 @@ if (file_exists($_SERVER["DOCUMENT_ROOT"] . '/vendor/autoload.php')) {
 //Container
 $container = new Container();
 $containerBuilder = new ContainerBuilder();
-
 $containerBuilder->addDefinitions([
     PDO::class => static function () {
         return new PDO('mysql:host=localhost;dbname=module2exam;charset=utf8', 'admin', 'root');
@@ -64,25 +64,23 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $rou
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
-
 if (false !== $pos = strpos($uri, '?')) {
     $uri = substr($uri, 0, $pos);
 }
 $uri = rawurldecode($uri);
-
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
-        echo 'Error404';
+        $container->call([Controller::class, 'error404'], []);
         break;
     case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
         $allowedMethods = $routeInfo[1];
-        echo 'Error404';
+        $container->call([Controller::class, 'error404'], []);
         break;
     case FastRoute\Dispatcher::FOUND:
         $handler = $routeInfo[1];
         $vars = $routeInfo[2];
-
+        //Контроллер
         $container->call($handler, [$vars]);
         break;
 }
