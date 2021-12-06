@@ -10,14 +10,16 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="msapplication-tap-highlight" content="no">
     <!-- base css -->
-    <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="<?= $this->asset('/assets/css/vendors.bundle.css') ?>">
-    <link id="appbundle" rel="stylesheet" media="screen, print" href="<?= $this->asset('/assets/css/app.bundle.css') ?>">
+    <link id="vendorsbundle" rel="stylesheet" media="screen, print"
+          href="<?= $this->asset('/assets/css/vendors.bundle.css') ?>">
+    <link id="appbundle" rel="stylesheet" media="screen, print"
+          href="<?= $this->asset('/assets/css/app.bundle.css') ?>">
     <link id="myskin" rel="stylesheet" media="screen, print" href="<?= $this->asset('/assets/css/skin-master.css') ?>">
     <!-- favicon.ico -->
     <link rel="apple-touch-icon" sizes="180x180" href="<?= $this->asset('/assets/img/favicon/apple-touch-icon.png') ?>">
     <link rel="icon" type="image/png" sizes="32x32" href="<?= $this->asset('/assets/img/favicon/favicon-32x32.png') ?>">
     <link rel="mask-icon" href="<?= $this->asset('/assets/img/favicon/safari-pinned-tab.svg') ?>" color="#5bbad5">
-    <? if($page): ?>
+    <? if ($page): ?>
         <link rel="stylesheet" media="screen, print" href="<?= $this->asset('/assets/css/page-login-alt.css') ?>">
     <? endif; ?>
     <link rel="stylesheet" media="screen, print" href="<?= $this->asset('/assets/css/fa-solid.css') ?>">
@@ -27,20 +29,21 @@
 </head>
 <body>
 
-<? if(!$page): ?>
+<? if (!$page): ?>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary bg-primary-gradient">
         <a class="navbar-brand d-flex align-items-center fw-500" href="/">
-            <img alt="logo"
-                 class="d-inline-block align-top mr-2"
-                 src="<?= $this->asset('/assets/img/logo.png') ?>"> Учебный проект
+            <img alt="logo" class="d-inline-block align-top mr-2" src="<?= $this->asset('/assets/img/logo.png') ?>"> Учебный проект
         </a>
-        <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
-                data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span>
+        <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation"
+                class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/">Главная
+                        <span class="sr-only">(current)</span>
+                    </a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">

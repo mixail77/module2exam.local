@@ -19,6 +19,12 @@ class UserController extends Controller
 
     }
 
+    public function postCreate()
+    {
+
+
+    }
+
     public function profile()
     {
 
@@ -33,10 +39,22 @@ class UserController extends Controller
 
     }
 
+    public function postProfileEdit()
+    {
+
+
+    }
+
     public function profileMedia()
     {
 
         echo $this->engine->render('media.view', []);
+
+    }
+
+    public function postProfileMediaEdit()
+    {
+
 
     }
 
@@ -47,6 +65,12 @@ class UserController extends Controller
 
     }
 
+    public function postProfileStatusEdit()
+    {
+
+
+    }
+
     public function profileSecurity()
     {
 
@@ -54,17 +78,16 @@ class UserController extends Controller
 
     }
 
+    public function postProfileSecurityEdit()
+    {
+
+
+    }
+
     public function profileDelete()
     {
 
         echo $this->engine->render('delete.view', []);
-
-    }
-
-    public function logout()
-    {
-
-
 
     }
 

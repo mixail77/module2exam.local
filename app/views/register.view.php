@@ -16,9 +16,8 @@ $this->layout('layout', [
             <div class="height-10 w-100 shadow-lg px-4 bg-brand-gradient">
                 <div class="d-flex align-items-center container p-0">
                     <div class="page-logo width-mobile-auto m-0 align-items-center justify-content-center p-0 bg-transparent bg-img-none shadow-0 height-9 border-0">
-                        <a href="javascript:void(0)" class="page-logo-link press-scale-down d-flex align-items-center">
-                            <img src="<?= $this->asset('/assets/img/logo.png') ?>" alt="SmartAdmin WebApp"
-                                 aria-roledescription="logo">
+                        <a href="/" class="page-logo-link press-scale-down d-flex align-items-center">
+                            <img src="<?= $this->asset('/assets/img/logo.png') ?>" alt="" aria-roledescription="logo">
                             <span class="page-logo-text mr-1">Учебный проект</span>
                         </a>
                     </div>
@@ -38,7 +37,8 @@ $this->layout('layout', [
                             <h2 class="fs-xxl fw-500 mt-4 text-white text-center">
                                 Регистрация
                                 <small class="h3 fw-300 mt-3 mb-5 text-white opacity-60 hidden-sm-down">
-                                    E-mail будет вашим логином при авторизации.
+                                    E-mail будет вашим логином при авторизации.<br />
+                                    На указанный E-mail будет отправлено письмо, содержащее ссылку для активации учетной записи.
                                 </small>
                             </h2>
                         </div>
@@ -48,14 +48,12 @@ $this->layout('layout', [
                                 <form id="js-login" novalidate="" action="/register/" method="post">
                                     <div class="form-group">
                                         <label class="form-label" for="emailverify">E-mail</label>
-                                        <input type="email" id="emailverify" class="form-control" placeholder="E-mail"
-                                               required>
+                                        <input type="email" name="email" id="emailverify" class="form-control" value="<?= $this->e($email) ?>" placeholder="E-mail" required>
                                         <div class="invalid-feedback">Заполните поле.</div>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label" for="userpassword">Пароль <br></label>
-                                        <input type="password" id="userpassword" class="form-control"
-                                               placeholder="Пароль" required>
+                                        <input type="password" name="password" id="userpassword" class="form-control" value="<?= $this->e($password) ?>" placeholder="Пароль" required>
                                         <div class="invalid-feedback">Заполните поле.</div>
                                     </div>
                                     <div class="row no-gutters">
@@ -76,13 +74,4 @@ $this->layout('layout', [
     </div>
 </div>
 <script src="<?= $this->asset('/assets/js/vendors.bundle.js') ?>"></script>
-<script>
-    $('#js-login-btn').click(function (event) {
-        var form = $('#js-login');
-        if (form[0].checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        form.addClass('was-validated');
-    });
-</script>
+

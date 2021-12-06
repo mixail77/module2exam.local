@@ -2,6 +2,7 @@
 
 namespace App\Classes;
 
+use App\Exception\QueryBuilderException;
 use Aura\SqlQuery\QueryFactory;
 use PDO;
 
@@ -19,11 +20,19 @@ class QueryBuilder
 
     }
 
+    /**
+     * Получает все записи из таблицы
+     * @throws QueryBuilderException
+     */
     public function getAll($table)
     {
 
         if (empty($table)) {
-            return false;
+
+            throw new QueryBuilderException(
+                'QueryBuilderException getAll'
+            );
+
         }
 
         //Sql запрос
@@ -42,11 +51,19 @@ class QueryBuilder
 
     }
 
+    /**
+     * Получает запись из таблицы по ID
+     * @throws QueryBuilderException
+     */
     public function getById($table, $id)
     {
 
         if (empty($table) || empty($id)) {
-            return false;
+
+            throw new QueryBuilderException(
+                'QueryBuilderException getById'
+            );
+
         }
 
         //Sql запрос
@@ -68,11 +85,19 @@ class QueryBuilder
 
     }
 
+    /**
+     * Добавляет новую запись в таблицу
+     * @throws QueryBuilderException
+     */
     public function create($table, $arFields)
     {
 
         if (empty($table) || !is_array($arFields)) {
-            return false;
+
+            throw new QueryBuilderException(
+                'QueryBuilderException create'
+            );
+
         }
 
         $arKeys = array_keys($arFields);
@@ -95,11 +120,19 @@ class QueryBuilder
 
     }
 
+    /**
+     * Обновляет запись в таблице по ID
+     * @throws QueryBuilderException
+     */
     public function update($table, $id, $arFields)
     {
 
         if (empty($table) || empty($id) || !is_array($arFields)) {
-            return false;
+
+            throw new QueryBuilderException(
+                'QueryBuilderException update'
+            );
+
         }
 
         $arKeys = array_keys($arFields);
@@ -123,11 +156,19 @@ class QueryBuilder
 
     }
 
+    /**
+     * Удаляет запись из таблицы по ID
+     * @throws QueryBuilderException
+     */
     public function delete($table, $id)
     {
 
         if (empty($table) || empty($id)) {
-            return false;
+
+            throw new QueryBuilderException(
+                'QueryBuilderException delete'
+            );
+
         }
 
         //Sql запрос
