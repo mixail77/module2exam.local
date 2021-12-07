@@ -2,16 +2,16 @@
 
 namespace App\Controller;
 
-use Valitron\Validator;
+use App\Exception\QueryBuilderException;
 use Delight\Auth\AuthError;
 use Delight\Auth\InvalidEmailException;
 use Delight\Auth\InvalidPasswordException;
-use Delight\Auth\UserAlreadyExistsException;
-use Delight\Auth\TooManyRequestsException;
 use Delight\Auth\InvalidSelectorTokenPairException;
 use Delight\Auth\TokenExpiredException;
-use App\Exception\QueryBuilderException;
+use Delight\Auth\TooManyRequestsException;
+use Delight\Auth\UserAlreadyExistsException;
 use RuntimeException;
+use Valitron\Validator;
 
 class RegisterController extends Controller
 {
@@ -51,6 +51,9 @@ class RegisterController extends Controller
         } else if ($this->createUser() && $this->createProfile() && $this->confirmSend()) {
 
             $this->flash->success('Вы зарегистрированы. На указанный E-mail отправлено письмо для активации учетной записи');
+
+            //Редирект на главную
+            $this->redirect->redirectTo();
 
         }
 

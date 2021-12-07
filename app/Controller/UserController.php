@@ -2,13 +2,33 @@
 
 namespace App\Controller;
 
+use App\Exception\QueryBuilderException;
+
 class UserController extends Controller
 {
 
+    /**
+     * Возвращает список пользователей
+     * @return void
+     */
     public function users()
     {
 
-        echo $this->engine->render('users.view', []);
+        try {
+
+            $users = $this->query->getAll('users');
+            $profile = $this->query->getAll('profile');
+
+        } catch (QueryBuilderException $exception) {
+
+            $this->flash->error('Ошибка. Список пользователей');
+
+        }
+
+        echo $this->engine->render('users.view', [
+            'users' => $users,
+            'profile' => $profile,
+        ]);
 
     }
 

@@ -8,9 +8,12 @@ class Request
     private $arPost;
     private $arQuery;
     private $arServer;
+    private $arSession;
+
     private $postValue;
     private $queryValue;
     private $serverValue;
+    private $sessionValue;
 
     public function __construct()
     {
@@ -18,6 +21,7 @@ class Request
         $this->arPost = $_POST;
         $this->arQuery = $_GET;
         $this->arServer = $_SERVER;
+        $this->arSession = $_SESSION;
 
     }
 
@@ -93,6 +97,20 @@ class Request
         $this->serverValue = $this->arServer[$key];
 
         return $this->serverValue;
+
+    }
+
+    /**
+     * Возвращает значение из $_SESSION массива по ключу
+     * @param $key
+     * @return mixed
+     */
+    public function getSession($key)
+    {
+
+        $this->sessionValue = $this->arSession[$key];
+
+        return $this->sessionValue;
 
     }
 

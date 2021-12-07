@@ -23,14 +23,14 @@ class Controller
     public $request;
 
     public function __construct(
-        QueryBuilder   $query,
-        Auth           $auth,
-        Engine         $engine,
-        Asset          $asset,
-        Flash          $flash,
-        SimpleMail     $mail,
-        Redirect       $redirect,
-        Request        $request
+        QueryBuilder $query,
+        Auth         $auth,
+        Engine       $engine,
+        Asset        $asset,
+        Flash        $flash,
+        SimpleMail   $mail,
+        Redirect     $redirect,
+        Request      $request
     )
     {
 
@@ -66,10 +66,16 @@ class Controller
     /**
      * Выход пользователя
      * @return void
+     * @throws \Delight\Auth\AuthError
      */
     public function logout()
     {
 
+        $this->auth->logOut();
+
+        $this->flash->success('Вы не авторизованы');
+
+        $this->redirect->redirectTo();
 
     }
 

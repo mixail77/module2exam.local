@@ -1,9 +1,9 @@
 <?php
 
-use App\Controller\Controller;
 use App\Controller\AuthController;
-use App\Controller\UserController;
+use App\Controller\Controller;
 use App\Controller\RegisterController;
+use App\Controller\UserController;
 use Aura\SqlQuery\QueryFactory;
 use Delight\Auth\Auth;
 use DI\Container;

@@ -23,15 +23,15 @@ $this->layout('layout', [
         <form action="/" method="post">
             <div class="form-group">
                 <label class="form-label" for="email">E-mail</label>
-                <input type="email" id="email" class="form-control" placeholder="E-mail" value="">
+                <input type="email" name="email" id="email" class="form-control" placeholder="E-mail" value="<?= $this->e($email) ?>">
             </div>
             <div class="form-group">
                 <label class="form-label" for="password">Пароль</label>
-                <input type="password" id="password" class="form-control" placeholder="Пароль">
+                <input type="password" name="password" id="password" class="form-control" placeholder="Пароль" value="<?= $this->e($password) ?>">
             </div>
             <div class="form-group text-left">
                 <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="remember">
+                    <input type="checkbox" name="remember" class="custom-control-input" id="remember" value="Y" <?= ($this->e($remember)) ? 'checked' : '' ?>>
                     <label class="custom-control-label" for="remember">Запомнить меня</label>
                 </div>
             </div>
