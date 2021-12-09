@@ -46,12 +46,6 @@ class UserController extends Controller
     public function create()
     {
 
-        if (!$this->isAuth()) {
-
-            $this->redirect->redirectTo();
-
-        }
-
         echo $this->engine->render('create.view', []);
 
     }
@@ -63,11 +57,6 @@ class UserController extends Controller
     public function postCreate()
     {
 
-        if (!$this->isAuth()) {
-
-            $this->redirect->redirectTo();
-
-        }
 
 
     }
@@ -79,13 +68,19 @@ class UserController extends Controller
     public function profile($vars)
     {
 
-        if (!$this->isAuth()) {
+        try {
 
-            $this->redirect->redirectTo();
+            $arProfile = $this->query->getProfileByUserId('profile', $vars['id']);
+
+        } catch (QueryBuilderException $exception) {
+
+            $this->flash->error($exception->getMessage());
 
         }
 
-        echo $this->engine->render('profile.view', []);
+        echo $this->engine->render('profile.view', [
+            'profile' => $arProfile,
+        ]);
 
     }
 
@@ -96,12 +91,6 @@ class UserController extends Controller
      */
     public function profileEdit($vars)
     {
-
-        if (!$this->isAuth()) {
-
-            $this->redirect->redirectTo();
-
-        }
 
         try {
 
@@ -125,12 +114,6 @@ class UserController extends Controller
      */
     public function postProfileEdit($vars)
     {
-
-        if (!$this->isAuth()) {
-
-            $this->redirect->redirectTo();
-
-        }
 
         $arProfile = [
             'name' => $this->request->getPost('name'),
@@ -178,12 +161,6 @@ class UserController extends Controller
     public function profileMedia()
     {
 
-        if (!$this->isAuth()) {
-
-            $this->redirect->redirectTo();
-
-        }
-
         echo $this->engine->render('media.view', []);
 
     }
@@ -195,11 +172,6 @@ class UserController extends Controller
     public function postProfileMediaEdit()
     {
 
-        if (!$this->isAuth()) {
-
-            $this->redirect->redirectTo();
-
-        }
 
 
     }
@@ -210,12 +182,6 @@ class UserController extends Controller
      */
     public function profileStatus()
     {
-
-        if (!$this->isAuth()) {
-
-            $this->redirect->redirectTo();
-
-        }
 
         echo $this->engine->render('status.view', []);
 
@@ -228,11 +194,6 @@ class UserController extends Controller
     public function postProfileStatusEdit()
     {
 
-        if (!$this->isAuth()) {
-
-            $this->redirect->redirectTo();
-
-        }
 
 
     }
@@ -243,12 +204,6 @@ class UserController extends Controller
      */
     public function profileSecurity()
     {
-
-        if (!$this->isAuth()) {
-
-            $this->redirect->redirectTo();
-
-        }
 
         echo $this->engine->render('security.view', []);
 
@@ -261,11 +216,6 @@ class UserController extends Controller
     public function postProfileSecurityEdit()
     {
 
-        if (!$this->isAuth()) {
-
-            $this->redirect->redirectTo();
-
-        }
 
 
     }
@@ -276,12 +226,6 @@ class UserController extends Controller
      */
     public function profileDelete()
     {
-
-        if (!$this->isAuth()) {
-
-            $this->redirect->redirectTo();
-
-        }
 
         echo $this->engine->render('delete.view', []);
 

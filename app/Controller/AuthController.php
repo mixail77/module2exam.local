@@ -41,6 +41,12 @@ class AuthController extends Controller
     public function postAuth()
     {
 
+        if ($this->isAuth()) {
+
+            $this->redirect->redirectTo('/users/');
+
+        }
+
         $validator = new Validator($this->request->getAllPost());
         $validator->rule('required', ['email', 'password']);
         $validator->rule('email', 'email');
