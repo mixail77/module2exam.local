@@ -70,8 +70,8 @@ class QueryBuilder
         $select = $this->query->newSelect();
         $select->cols(['*']);
         $select->from($table);
-        $select->where('ID = :ID');
-        $select->bindValue('ID', $id);
+        $select->where('id = :id');
+        $select->bindValue('id', $id);
 
         //Подготавливаем запрос
         $sql = $select->getStatement();
@@ -141,8 +141,8 @@ class QueryBuilder
         $update = $this->query->newUpdate();
         $update->table($table);
         $update->cols($arKeys);
-        $update->where('ID = :ID');
-        $update->bindValues(array_merge($arFields, ['ID' => $id]));
+        $update->where('id = :id');
+        $update->bindValues(array_merge($arFields, ['id' => $id]));
 
         //Подготавливаем запрос
         $sql = $update->getStatement();
@@ -174,8 +174,8 @@ class QueryBuilder
         //Sql запрос
         $delete = $this->query->newDelete();
         $delete->from($table);
-        $delete->where('ID = :ID');
-        $delete->bindValue('ID', $id);
+        $delete->where('id = :id');
+        $delete->bindValue('id', $id);
 
         //Подготавливаем запрос
         $sql = $delete->getStatement();
@@ -189,9 +189,40 @@ class QueryBuilder
 
     }
 
-    public function getProfileById()
+    /**
+     * Получает профиль по ID пользователя
+     * @param $table
+     * @param $id
+     * @return mixed
+     * @throws QueryBuilderException
+     */
+    public function getProfileByUserId($table, $id)
     {
 
+        if (empty($table) || empty($id)) {
+
+            throw new QueryBuilderException(
+                'QueryBuilderException getProfileByUserId'
+            );
+
+        }
+
+        //Sql запрос
+        $select = $this->query->newSelect();
+        $select->cols(['*']);
+        $select->from($table);
+        $select->where('user_id = :user_id');
+        $select->bindValue('user_id', $id);
+
+        //Подготавливаем запрос
+        $sql = $select->getStatement();
+        $statement = $this->pdo->prepare($sql);
+
+        //Выполняем запрос
+        $bind = $select->getBindValues();
+        $statement->execute($bind);
+
+        return $statement->fetch(PDO::FETCH_ASSOC);
 
     }
 

@@ -104,7 +104,7 @@ class Controller
     }
 
     /**
-     * Подключает шаблон дял ошибки 404
+     * Подключает шаблон для ошибки 404
      * @return void
      */
     public function error404()

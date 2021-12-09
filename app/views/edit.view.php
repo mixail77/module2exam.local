@@ -15,7 +15,9 @@ $this->layout('layout', [
             <i class='subheader-icon fal fa-plus-circle'></i> Редактировать пользователя
         </h1>
     </div>
-    <form action="/profile/12/edit/" method="post">
+    <?= Flash::display() ?>
+    <form action="/profile/<?= $profile['user_id'] ?>/edit/" method="post">
+        <input type="hidden" name="profile_id" value="<?= $profile['id'] ?>">
         <div class="row">
             <div class="col-xl-6">
                 <div id="panel-1" class="panel">
@@ -26,20 +28,19 @@ $this->layout('layout', [
                         <div class="panel-content">
                             <div class="form-group">
                                 <label class="form-label" for="simpleinput">Имя</label>
-                                <input type="text" id="simpleinput" class="form-control" value="Иван иванов">
+                                <input type="text" name="name" id="simpleinput" class="form-control" value="<?= $profile['name'] ?>">
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="simpleinput">Место работы</label>
-                                <input type="text" id="simpleinput" class="form-control" value="Marlin Веб-разработчик">
+                                <input type="text" name="job" id="simpleinput" class="form-control" value="<?= $profile['job'] ?>">
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="simpleinput">Номер телефона</label>
-                                <input type="text" id="simpleinput" class="form-control" value="8 888 8888 88">
+                                <input type="text" name="phone" id="simpleinput" class="form-control" value="<?= $profile['phone'] ?>">
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="simpleinput">Адрес</label>
-                                <input type="text" id="simpleinput" class="form-control"
-                                       value="Восточные Королевства, Штормград">
+                                <input type="text" name="address" id="simpleinput" class="form-control" value="<?= $profile['address'] ?>">
                             </div>
                             <div class="col-md-12 mt-3 d-flex flex-row-reverse">
                                 <button class="btn btn-warning">Редактировать</button>
