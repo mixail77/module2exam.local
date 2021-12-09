@@ -28,6 +28,12 @@ class RegisterController extends Controller
     public function register()
     {
 
+        if ($this->isAuth()) {
+
+            $this->redirect->redirectTo('/users/');
+
+        }
+
         echo $this->engine->render('register.view', []);
 
     }
@@ -162,7 +168,7 @@ class RegisterController extends Controller
     }
 
     /**
-     * Подтверждает регистрацию пользователя
+     * Подтверждает регистрацию пользователя по ссылке
      * @return void
      * @throws AuthError
      */

@@ -11,6 +11,7 @@ use DI\ContainerBuilder;
 use League\Plates\Engine;
 use League\Plates\Extension\Asset;
 
+ini_set('display_errors', 'off');
 session_start();
 
 if (file_exists($_SERVER["DOCUMENT_ROOT"] . '/vendor/autoload.php')) {

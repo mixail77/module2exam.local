@@ -26,7 +26,8 @@ $this->layout('layout', [
                         </div>
                         <div class="panel-content">
                             <div class="form-group">
-                                <img src="<?= $this->asset('/assets/img/logo.png') ?>" alt="" class="img-responsive" width="200">
+                                <img src="<?= $this->asset('/assets/img/logo.png') ?>" alt="" class="img-responsive"
+                                     width="200">
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="example-fileinput">Выберите аватар</label>

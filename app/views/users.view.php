@@ -24,8 +24,8 @@ $this->layout('layout', [
                        class="form-control shadow-inset-2 form-control-lg" placeholder="Найти пользователя">
                 <div class="btn-group btn-group-lg btn-group-toggle hidden-lg-down ml-3" data-toggle="buttons">
                     <label class="btn btn-default active">
-                        <input type="radio" name="contactview" id="grid" checked="" value="grid"><i
-                                class="fas fa-table"></i>
+                        <input type="radio" name="contactview" id="grid" checked="" value="grid">
+                        <i class="fas fa-table"></i>
                     </label>
                     <label class="btn btn-default">
                         <input type="radio" name="contactview" id="table" value="table"><i class="fas fa-th-list"></i>
@@ -40,43 +40,28 @@ $this->layout('layout', [
         <? foreach ($users as $user): ?>
 
             <div class="col-xl-4">
-                <div id="c_<?= $user['id'] ?>" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="ФИО">
+                <div id="c_<?= $user['id'] ?>" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="<?= $profile[$user['id']['name']] ?>">
                     <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
                         <div class="d-flex flex-row align-items-center">
-                                <span class="status status-success mr-3">
-                                    <span class="rounded-circle profile-image d-block "
-                                          style="background-image:url(<?= $this->asset('/assets/img/logo.png') ?>); background-size: cover;"></span>
+                                <span class="status status-<?= $profile[$user['id']['status']['code']] ?> mr-3">
+                                    <span class="rounded-circle profile-image d-block"
+                                          style="background-image:url(<?= $profile[$user['id']['photo']] ?>); background-size: cover;"></span>
                                 </span>
                             <div class="info-card-text flex-1">
                                 <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info"
-                                   data-toggle="dropdown" aria-expanded="false">ФИО
+                                   data-toggle="dropdown" aria-expanded="false"><?= $profile[$user['id']['name']] ?>
                                     <i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>
                                     <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
                                 </a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/">
-                                        <i class="fa fa-user"></i> Профиль
-                                    </a>
-                                    <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/edit/">
-                                        <i class="fa fa-edit"></i>
-                                        Редактировать</a>
-                                    <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/security/">
-                                        <i class="fa fa-lock"></i>
-                                        Безопасность</a>
-                                    <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/status/">
-                                        <i class="fa fa-sun"></i>
-                                        Установить статус</a>
-                                    <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/media/">
-                                        <i class="fa fa-camera"></i>
-                                        Загрузить аватар
-                                    </a>
-                                    <a href="/profile/<?= $user['id'] ?>/delete/" class="dropdown-item"
-                                       onclick="return confirm('Подтверждаете удаление?');">
-                                        <i class="fa fa-window-close"></i>
-                                        Удалить
-                                    </a>
+                                    <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/"><i class="fa fa-user"></i> Профиль</a>
+                                    <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/edit/"><i class="fa fa-edit"></i>Редактировать</a>
+                                    <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/security/"><i class="fa fa-lock"></i>Безопасность</a>
+                                    <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/status/"><i class="fa fa-sun"></i>Установить статус</a>
+                                    <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/media/"><i class="fa fa-camera"></i>Загрузить аватар</a>
+                                    <a href="/profile/<?= $user['id'] ?>/delete/" class="dropdown-item" onclick="return confirm('Подтверждаете удаление?');"><i class="fa fa-window-close"></i>Удалить</a>
                                 </div>
-                                <span class="text-truncate text-truncate-xl">Должность</span>
+                                <span class="text-truncate text-truncate-xl"><?= $profile[$user['id']['job']] ?></span>
                             </div>
                             <button class="js-expand-btn btn btn-sm btn-default d-none" data-toggle="collapse"
                                     data-target="#c_<?= $user['id'] ?> > .card-body + .card-body" aria-expanded="false">
@@ -87,21 +72,24 @@ $this->layout('layout', [
                     </div>
                     <div class="card-body p-0 collapse show">
                         <div class="p-3">
-                            <a href="tel:+13174562564" class="mt-1 d-block fs-sm fw-400 text-dark">
-                                <i class="fas fa-mobile-alt text-muted mr-2"></i> Телефон</a>
-                            <a href="mailto:oliver.kopyov@smartadminwebapp.com" class="mt-1 d-block fs-sm fw-400 text-dark">
-                                <i class="fas fa-mouse-pointer text-muted mr-2"></i> Почта</a>
+                            <a href="tel:+<?= $profile[$user['id']['phone']] ?>" class="mt-1 d-block fs-sm fw-400 text-dark">
+                                <i class="fas fa-mobile-alt text-muted mr-2"></i> <?= ($profile[$user['id']['phone']]) ?>
+                            </a>
+                            <a href="mailto:<?= $user['email'] ?>"
+                               class="mt-1 d-block fs-sm fw-400 text-dark">
+                                <i class="fas fa-mouse-pointer text-muted mr-2"></i> <?= $user['email'] ?>
+                            </a>
                             <address class="fs-sm fw-400 mt-4 text-muted">
-                                <i class="fas fa-map-pin mr-2"></i> Адрес
+                                <i class="fas fa-map-pin mr-2"></i> <?= $profile[$user['id']['address']] ?>
                             </address>
                             <div class="d-flex flex-row">
-                                <a href="javascript:void(0);" class="mr-2 fs-xxl" style="color:#4680C2">
+                                <a href="<?= $profile[$user['id']['vk']] ?>" class="mr-2 fs-xxl" style="color:#4680C2">
                                     <i class="fab fa-vk"></i>
                                 </a>
-                                <a href="javascript:void(0);" class="mr-2 fs-xxl" style="color:#38A1F3">
+                                <a href="<?= $profile[$user['id']['telegram']] ?>" class="mr-2 fs-xxl" style="color:#38A1F3">
                                     <i class="fab fa-telegram"></i>
                                 </a>
-                                <a href="javascript:void(0);" class="mr-2 fs-xxl" style="color:#E1306C">
+                                <a href="<?= $profile[$user['id']['instagram']] ?>" class="mr-2 fs-xxl" style="color:#E1306C">
                                     <i class="fab fa-instagram"></i>
                                 </a>
                             </div>
@@ -131,7 +119,6 @@ $this->layout('layout', [
                 $('#js-contacts .js-expand-btn').removeClass('d-none');
                 $('#js-contacts .card-body + .card-body').removeClass('show');
             }
-
         });
         initApp.listFilter($('#js-contacts'), $('#js-filter-contacts'));
     });

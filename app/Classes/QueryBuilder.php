@@ -189,4 +189,10 @@ class QueryBuilder
 
     }
 
+    public function getProfileById()
+    {
+
+
+    }
+
 }

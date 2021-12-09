@@ -32,7 +32,8 @@
 <? if (!$page): ?>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary bg-primary-gradient">
         <a class="navbar-brand d-flex align-items-center fw-500" href="/">
-            <img alt="logo" class="d-inline-block align-top mr-2" src="<?= $this->asset('/assets/img/logo.png') ?>"> Учебный проект
+            <img alt="logo" class="d-inline-block align-top mr-2" src="<?= $this->asset('/assets/img/logo.png') ?>">
+            Учебный проект
         </a>
         <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation"
                 class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button">

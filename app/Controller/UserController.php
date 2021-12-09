@@ -17,7 +17,6 @@ class UserController extends Controller
         try {
 
             $users = $this->query->getAll('users');
-            $profile = $this->query->getAll('profile');
 
         } catch (QueryBuilderException $exception) {
 
@@ -52,7 +51,7 @@ class UserController extends Controller
 
     }
 
-    public function profileEdit()
+    public function profileEdit($vars)
     {
 
         echo $this->engine->render('edit.view', []);

@@ -22,6 +22,12 @@ class AuthController extends Controller
     public function auth()
     {
 
+        if ($this->isAuth()) {
+
+            $this->redirect->redirectTo('/users/');
+
+        }
+
         echo $this->engine->render('authorize.view', []);
 
     }
@@ -61,7 +67,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Авторизует пользователя
+     * Авторизует и запоминает пользователя
      * @return bool
      * @throws AttemptCancelledException
      * @throws AuthError
@@ -102,12 +108,5 @@ class AuthController extends Controller
         return false;
 
     }
-
-    private function rememberUser()
-    {
-
-
-    }
-
 
 }
