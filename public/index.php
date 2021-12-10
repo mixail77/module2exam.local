@@ -1,9 +1,16 @@
 <?php
 
 use App\Controller\AuthController;
-use App\Controller\Controller;
+use App\Controller\ErrorController;
+use App\Controller\ProfileController;
+use App\Controller\LogoutController;
 use App\Controller\RegisterController;
-use App\Controller\UserController;
+use App\Controller\SecurityController;
+use App\Controller\DeleteController;
+use App\Controller\StatusController;
+use App\Controller\UsersController;
+use App\Controller\MediaController;
+use App\Controller\СreateController;
 use Aura\SqlQuery\QueryFactory;
 use Delight\Auth\Auth;
 use DI\Container;
@@ -50,23 +57,28 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $rou
     $rout->addRoute('POST', '/register/', [RegisterController::class, 'postRegister']);
     $rout->addRoute('GET', '/confirm/', [RegisterController::class, 'confirmRegister']);
     //Список пользователей
-    $rout->addRoute('GET', '/users/', [UserController::class, 'users']);
-    $rout->addRoute('GET', '/users/{id:[0-9]+}/', [UserController::class, 'users']);
-    //Профиль пользователя
-    $rout->addRoute('GET', '/create/', [UserController::class, 'create']);
-    $rout->addRoute('POST', '/create/', [UserController::class, 'postCreate']);
-    $rout->addRoute('GET', '/profile/{id:[0-9]+}/', [UserController::class, 'profile']);
-    $rout->addRoute('GET', '/profile/{id:[0-9]+}/edit/', [UserController::class, 'profileEdit']);
-    $rout->addRoute('POST', '/profile/{id:[0-9]+}/edit/', [UserController::class, 'postProfileEdit']);
-    $rout->addRoute('GET', '/profile/{id:[0-9]+}/media/', [UserController::class, 'profileMedia']);
-    $rout->addRoute('POST', '/profile/{id:[0-9]+}/media/', [UserController::class, 'postProfileMediaEdit']);
-    $rout->addRoute('GET', '/profile/{id:[0-9]+}/status/', [UserController::class, 'profileStatus']);
-    $rout->addRoute('POST', '/profile/{id:[0-9]+}/status/', [UserController::class, 'postProfileStatusEdit']);
-    $rout->addRoute('GET', '/profile/{id:[0-9]+}/security/', [UserController::class, 'profileSecurity']);
-    $rout->addRoute('POST', '/profile/{id:[0-9]+}/security/', [UserController::class, 'postProfileSecurityEdit']);
-    $rout->addRoute('GET', '/profile/{id:[0-9]+}/delete/', [UserController::class, 'profileDelete']);
+    $rout->addRoute('GET', '/users/', [UsersController::class, 'users']);
+    $rout->addRoute('GET', '/users/{id:[0-9]+}/', [UsersController::class, 'users']);
+    //Добавить пользователя
+    $rout->addRoute('GET', '/create/', [СreateController::class, 'create']);
+    $rout->addRoute('POST', '/create/', [СreateController::class, 'postCreate']);
+    //Редактировать пользователя
+    $rout->addRoute('GET', '/profile/{id:[0-9]+}/', [ProfileController::class, 'profile']);
+    $rout->addRoute('GET', '/profile/{id:[0-9]+}/edit/', [ProfileController::class, 'profileEdit']);
+    $rout->addRoute('POST', '/profile/{id:[0-9]+}/edit/', [ProfileController::class, 'postProfileEdit']);
+    //Загрузить аватар
+    $rout->addRoute('GET', '/profile/{id:[0-9]+}/media/', [MediaController::class, 'profileMedia']);
+    $rout->addRoute('POST', '/profile/{id:[0-9]+}/media/', [MediaController::class, 'postProfileMediaEdit']);
+    //Установить статус
+    $rout->addRoute('GET', '/profile/{id:[0-9]+}/status/', [StatusController::class, 'profileStatus']);
+    $rout->addRoute('POST', '/profile/{id:[0-9]+}/status/', [StatusController::class, 'postProfileStatusEdit']);
+    //Безопасность
+    $rout->addRoute('GET', '/profile/{id:[0-9]+}/security/', [SecurityController::class, 'profileSecurity']);
+    $rout->addRoute('POST', '/profile/{id:[0-9]+}/security/', [SecurityController::class, 'postProfileSecurityEdit']);
+    //Удалить пользователя
+    $rout->addRoute('GET', '/profile/{id:[0-9]+}/delete/', [DeleteController::class, 'profileDelete']);
     //Выход пользователя
-    $rout->addRoute('GET', '/logout/', [Controller::class, 'logout']);
+    $rout->addRoute('GET', '/logout/', [LogoutController::class, 'logout']);
 });
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];
@@ -79,12 +91,12 @@ $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
         //Контроллер 404
-        $container->call([Controller::class, 'error404'], []);
+        $container->call([ErrorController::class, 'error404'], []);
         break;
     case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
         $allowedMethods = $routeInfo[1];
         //Контроллер 404
-        $container->call([Controller::class, 'error404'], []);
+        $container->call([ErrorController::class, 'error404'], []);
         break;
     case FastRoute\Dispatcher::FOUND:
         $handler = $routeInfo[1];

@@ -13,7 +13,7 @@ use Delight\Auth\UserAlreadyExistsException;
 use RuntimeException;
 use Valitron\Validator;
 
-class RegisterController extends Controller
+class RegisterController extends BaseController
 {
 
     private $userId;
@@ -54,7 +54,7 @@ class RegisterController extends Controller
 
             $this->flash->error('Ошибка. Неверный E-mail или пароль');
 
-        } else if ($this->createUser() && $this->createProfile() && $this->confirmSend()) {
+        } else if ($this->createUser() && $this->createProfile() && $this->sendConfirm()) {
 
             $this->flash->success('Вы зарегистрированы. На указанный E-mail отправлено письмо для активации учетной записи');
 
@@ -85,7 +85,10 @@ class RegisterController extends Controller
                 $this->token = $token;
             });
 
+            //ID пользователя
             $this->userId = $userId;
+
+            //Email пользователя
             $this->email = $this->request->getPost('email');
 
             return true;
@@ -141,7 +144,7 @@ class RegisterController extends Controller
      * Отправляет ссылку для подтверждения регистрации пользователя
      * @return bool
      */
-    private function confirmSend()
+    private function sendConfirm()
     {
 
         try {

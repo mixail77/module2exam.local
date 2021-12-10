@@ -10,10 +10,10 @@ use Delight\Auth\InvalidPasswordException;
 use Delight\Auth\TooManyRequestsException;
 use Valitron\Validator;
 
-class AuthController extends Controller
+class AuthController extends BaseController
 {
 
-    private $duration = null;
+    private $duration;
 
     /**
      * Выводит форму авторизации
@@ -83,7 +83,7 @@ class AuthController extends Controller
 
         try {
 
-            if ($this->request->getPost('remember') == 'Y') {
+            if ($this->request->getPost('remember') === 'Y') {
 
                 $this->duration = (int)(60 * 60 * 24 * 365.25);
 
@@ -95,11 +95,11 @@ class AuthController extends Controller
 
         } catch (InvalidEmailException $exception) {
 
-            $this->flash->error('Ошибка. Неверный E-mail или пароль');
+            $this->flash->error('Ошибка. Неверный E-mail');
 
         } catch (InvalidPasswordException $exception) {
 
-            $this->flash->error('Ошибка. Неверный E-mail или пароль');
+            $this->flash->error('Ошибка. Неверный пароль');
 
         } catch (EmailNotVerifiedException $exception) {
 
