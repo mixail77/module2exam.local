@@ -17,18 +17,8 @@ class ProfileController extends BaseController
 
         $this->checkAccess();
 
-        try {
-
-            $arProfile = $this->query->getProfileByUserId('profile', $vars['id']);
-
-        } catch (QueryBuilderException $exception) {
-
-            $this->flash->error($exception->getMessage());
-
-        }
-
         echo $this->engine->render('profile.view', [
-            'profile' => $arProfile,
+            'user_id' => $vars['id'],
         ]);
 
     }
@@ -45,6 +35,7 @@ class ProfileController extends BaseController
 
         try {
 
+            //Получаем профиль пользователя по ID пользователя
             $arProfile = $this->query->getProfileByUserId('profile', $vars['id']);
 
         } catch (QueryBuilderException $exception) {
@@ -55,6 +46,7 @@ class ProfileController extends BaseController
 
         echo $this->engine->render('edit.view', [
             'profile' => $arProfile,
+            'user_id' => $vars['id'],
         ]);
 
     }
@@ -68,6 +60,8 @@ class ProfileController extends BaseController
 
         $this->checkAccess();
 
+        $profileId = $this->request->getPost('profile_id');
+
         $arProfile = [
             'name' => $this->request->getPost('name'),
             'job' => $this->request->getPost('job'),
@@ -80,18 +74,15 @@ class ProfileController extends BaseController
 
         if (!$validator->validate()) {
 
-            $this->flash->error('Ошибка. Редактировать пользователя');
+            $this->flash->error('Ошибка валидации');
 
         } else {
 
             try {
 
-                $this->query->update('profile', $this->request->getPost('profile_id'), $arProfile);
+                $this->query->update('profile', $profileId, $arProfile);
 
                 $this->flash->success('Данные сохранены');
-
-                //Редирект на страницу редактирования профиля
-                $this->redirect->redirectTo('/profile/' . $vars['id'] . '/edit/');
 
             } catch (QueryBuilderException $exception) {
 
@@ -101,8 +92,11 @@ class ProfileController extends BaseController
 
         }
 
+        $arProfile['id'] = $profileId;
+
         echo $this->engine->render('edit.view', [
             'profile' => $arProfile,
+            'user_id' => $vars['id'],
         ]);
 
     }

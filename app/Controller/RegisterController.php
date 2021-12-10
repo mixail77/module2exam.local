@@ -16,6 +16,8 @@ use Valitron\Validator;
 class RegisterController extends BaseController
 {
 
+    const STATUS_DEFAULT = 4;
+
     private $userId;
     private $email;
     private $selector;
@@ -124,6 +126,8 @@ class RegisterController extends BaseController
 
             $this->query->create('profile', [
                 'user_id' => $this->userId,
+                'status_id' => self::STATUS_DEFAULT,
+
             ]);
 
             return true;

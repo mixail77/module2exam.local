@@ -16,7 +16,8 @@ $this->layout('layout', [
         </h1>
     </div>
     <?= Flash::display() ?>
-    <form action="/profile/12/status/" method="post">
+    <form action="/profile/<?= $this->e($user_id) ?>/status/" method="post">
+        <input type="hidden" name="profile_id" value="<?= $profile['id'] ?>">
         <div class="row">
             <div class="col-xl-6">
                 <div id="panel-1" class="panel">
@@ -29,16 +30,15 @@ $this->layout('layout', [
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="form-label" for="example-select">Выберите статус</label>
-                                        <select class="form-control" id="example-select">
-                                            <option>Не установлен</option>
-                                            <option>Онлайн</option>
-                                            <option>Отошел</option>
-                                            <option>Не беспокоить</option>
+                                        <select class="form-control" id="example-select" name="status_id">
+                                            <? foreach($status as $value): ?>
+                                                <option value="<?= $value['id'] ?>" <?=($value['id'] == $profile['status_id']) ? 'selected' : ''?>><?= $value['name'] ?></option>
+                                            <? endforeach; ?>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                    <button class="btn btn-warning">Set Status</button>
+                                    <button class="btn btn-warning">Установить</button>
                                 </div>
                             </div>
                         </div>

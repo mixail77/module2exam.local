@@ -16,7 +16,7 @@ $this->layout('layout', [
         </h1>
     </div>
     <?= Flash::display() ?>
-    <form action="/profile/<?= $profile['user_id'] ?>/edit/" method="post">
+    <form action="/profile/<?= $this->e($user_id) ?>/edit/" method="post">
         <input type="hidden" name="profile_id" value="<?= $profile['id'] ?>">
         <div class="row">
             <div class="col-xl-6">
