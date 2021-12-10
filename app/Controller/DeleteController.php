@@ -12,6 +12,8 @@ class DeleteController extends BaseController
     public function profileDelete()
     {
 
+        $this->checkAccess();
+
         echo $this->engine->render('delete.view', []);
 
     }

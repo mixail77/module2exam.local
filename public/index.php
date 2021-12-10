@@ -91,12 +91,12 @@ $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
         //Контроллер 404
-        $container->call([ErrorController::class, 'error404'], []);
+        $container->call([ErrorController::class, 'pageNotFound'], []);
         break;
     case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
         $allowedMethods = $routeInfo[1];
         //Контроллер 404
-        $container->call([ErrorController::class, 'error404'], []);
+        $container->call([ErrorController::class, 'pageNotFound'], []);
         break;
     case FastRoute\Dispatcher::FOUND:
         $handler = $routeInfo[1];

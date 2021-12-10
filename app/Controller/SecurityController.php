@@ -12,6 +12,8 @@ class SecurityController extends BaseController
     public function profileSecurity()
     {
 
+        $this->checkAccess();
+
         echo $this->engine->render('security.view', []);
 
     }
@@ -22,6 +24,8 @@ class SecurityController extends BaseController
      */
     public function postProfileSecurityEdit()
     {
+
+        $this->checkAccess();
 
 
 

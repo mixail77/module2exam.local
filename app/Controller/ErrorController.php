@@ -9,10 +9,10 @@ class ErrorController extends BaseController
      * Подключает шаблон для страницы с ошибкой
      * @return void
      */
-    public function error404()
+    public function pageNotFound()
     {
 
-        $this->flash->error('404 Not Found');
+        $this->flash->error('Ошибка 404. Нет такой страницы');
 
         echo $this->engine->render('error404.view', []);
 

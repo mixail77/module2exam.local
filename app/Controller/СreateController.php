@@ -12,6 +12,8 @@ class СreateController extends BaseController
     public function create()
     {
 
+        $this->checkAccess();
+
         echo $this->engine->render('create.view', []);
 
     }
@@ -22,6 +24,8 @@ class СreateController extends BaseController
      */
     public function postCreate()
     {
+
+        $this->checkAccess();
 
 
 

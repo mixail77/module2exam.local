@@ -14,11 +14,7 @@ class UsersController extends BaseController
     public function users()
     {
 
-        if (!$this->isAuth()) {
-
-            $this->redirect->redirectTo();
-
-        }
+        $this->checkAccess();
 
         try {
 

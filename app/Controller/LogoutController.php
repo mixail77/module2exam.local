@@ -15,6 +15,8 @@ class LogoutController extends BaseController
     public function logout()
     {
 
+        $this->checkAccess();
+
         $this->auth->logOut();
 
         $this->flash->error('Сеанс пользователя завершен');

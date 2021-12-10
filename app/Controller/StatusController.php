@@ -12,6 +12,8 @@ class StatusController extends BaseController
     public function profileStatus()
     {
 
+        $this->checkAccess();
+
         echo $this->engine->render('status.view', []);
 
     }
@@ -22,6 +24,8 @@ class StatusController extends BaseController
      */
     public function postProfileStatusEdit()
     {
+
+        $this->checkAccess();
 
 
 

@@ -12,6 +12,8 @@ class MediaController extends BaseController
     public function profileMedia()
     {
 
+        $this->checkAccess();
+
         echo $this->engine->render('media.view', []);
 
     }
@@ -22,6 +24,8 @@ class MediaController extends BaseController
      */
     public function postProfileMediaEdit()
     {
+
+        $this->checkAccess();
 
 
 

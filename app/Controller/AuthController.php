@@ -22,11 +22,7 @@ class AuthController extends BaseController
     public function auth()
     {
 
-        if ($this->isAuth()) {
-
-            $this->redirect->redirectTo('/users/');
-
-        }
+        $this->checkAccess('guest');
 
         echo $this->engine->render('authorize.view', []);
 
@@ -41,11 +37,7 @@ class AuthController extends BaseController
     public function postAuth()
     {
 
-        if ($this->isAuth()) {
-
-            $this->redirect->redirectTo('/users/');
-
-        }
+        $this->checkAccess('guest');
 
         $validator = new Validator($this->request->getAllPost());
         $validator->rule('required', ['email', 'password']);

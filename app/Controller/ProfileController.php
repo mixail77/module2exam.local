@@ -15,6 +15,8 @@ class ProfileController extends BaseController
     public function profile($vars)
     {
 
+        $this->checkAccess();
+
         try {
 
             $arProfile = $this->query->getProfileByUserId('profile', $vars['id']);
@@ -39,6 +41,8 @@ class ProfileController extends BaseController
     public function profileEdit($vars)
     {
 
+        $this->checkAccess();
+
         try {
 
             $arProfile = $this->query->getProfileByUserId('profile', $vars['id']);
@@ -61,6 +65,8 @@ class ProfileController extends BaseController
      */
     public function postProfileEdit($vars)
     {
+
+        $this->checkAccess();
 
         $arProfile = [
             'name' => $this->request->getPost('name'),

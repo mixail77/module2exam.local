@@ -28,11 +28,7 @@ class RegisterController extends BaseController
     public function register()
     {
 
-        if ($this->isAuth()) {
-
-            $this->redirect->redirectTo('/users/');
-
-        }
+        $this->checkAccess('guest');
 
         echo $this->engine->render('register.view', []);
 
@@ -45,6 +41,8 @@ class RegisterController extends BaseController
      */
     public function postRegister()
     {
+
+        $this->checkAccess('guest');
 
         $validator = new Validator($this->request->getAllPost());
         $validator->rule('required', ['email', 'password']);
