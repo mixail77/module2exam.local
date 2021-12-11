@@ -10,7 +10,7 @@
     "fzaninotto/faker": "v1.9.2",
     "jasongrimes/paginator": "1.0.3",
     "php-di/php-di": "6.3.5",
-    "intervention/image": "2.7.0"
+    "intervention/image": "^2.7"
   },
   "autoload": {
     "psr-4": {

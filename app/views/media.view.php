@@ -16,7 +16,8 @@ $this->layout('layout', [
         </h1>
     </div>
     <?= Flash::display() ?>
-    <form action="/profile/12/media/" method="post">
+    <form action="/profile/<?= $this->e($user_id) ?>/media/" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="profile_id" value="<?= $profile['id'] ?>">
         <div class="row">
             <div class="col-xl-6">
                 <div id="panel-1" class="panel">
@@ -26,12 +27,11 @@ $this->layout('layout', [
                         </div>
                         <div class="panel-content">
                             <div class="form-group">
-                                <img src="<?= $this->asset('/assets/img/logo.png') ?>" alt="" class="img-responsive"
-                                     width="200">
+                                <img src="<?= ($profile['photo']) ? $profile['photo'] : $this->asset('/assets/img/logo.png') ?>" alt="" class="img-responsive" width="200">
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="example-fileinput">Выберите аватар</label>
-                                <input type="file" id="example-fileinput" class="form-control-file">
+                                <input type="file" name="photo" id="example-fileinput" class="form-control-file">
                             </div>
                             <div class="col-md-12 mt-3 d-flex flex-row-reverse">
                                 <button class="btn btn-warning">Загрузить</button>

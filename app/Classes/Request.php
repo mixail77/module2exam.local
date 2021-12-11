@@ -9,11 +9,13 @@ class Request
     private $arQuery;
     private $arServer;
     private $arSession;
+    private $arFiles;
 
     private $postValue;
     private $queryValue;
     private $serverValue;
     private $sessionValue;
+    private $filesValue;
 
     public function __construct()
     {
@@ -21,6 +23,7 @@ class Request
         $this->arPost = $_POST;
         $this->arQuery = $_GET;
         $this->arServer = $_SERVER;
+        $this->arFiles = $_FILES;
         $this->arSession = $_SESSION;
 
     }
@@ -101,6 +104,17 @@ class Request
     }
 
     /**
+     * Возвращает массив $_SESSION
+     * @return array
+     */
+    public function getAllSession()
+    {
+
+        return $this->arSession;
+
+    }
+
+    /**
      * Возвращает значение из $_SESSION массива по ключу
      * @param $key
      * @return mixed
@@ -111,6 +125,30 @@ class Request
         $this->sessionValue = $this->arSession[$key];
 
         return $this->sessionValue;
+
+    }
+
+    /**
+     * Возвращает массив $_FILES
+     * @return array
+     */
+    public function getAllFiles()
+    {
+
+        return $this->arFiles;
+
+    }
+
+    /**
+     * Возвращает значение из $_FILES массива по ключу
+     * @return array
+     */
+    public function getFiles($key)
+    {
+
+        $this->filesValue = $this->arFiles[$key];
+
+        return $this->filesValue;
 
     }
 

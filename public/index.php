@@ -21,8 +21,8 @@ use League\Plates\Extension\Asset;
 ini_set('display_errors', 'off');
 session_start();
 
-if (file_exists($_SERVER["DOCUMENT_ROOT"] . '/vendor/autoload.php')) {
-    require_once($_SERVER["DOCUMENT_ROOT"] . '/vendor/autoload.php');
+if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php')) {
+    require_once($_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php');
 }
 
 //Container
