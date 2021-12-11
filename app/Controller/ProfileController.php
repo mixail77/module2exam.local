@@ -11,14 +11,22 @@ class ProfileController extends BaseController
     /**
      * Выводит форму редактирования профиля пользователя
      * @return void
+     * @throws QueryBuilderException
      */
     public function profile($vars)
     {
 
         $this->checkAccess();
 
+        //Пользователь
+        $arUser = $this->query->getById('users', $vars['id']);
+
+        //Получаем профиль пользователя по ID пользователя
+        $arProfile = $this->query->getProfileByUserId('profile', $vars['id']);
+
         echo $this->engine->render('profile.view', [
-            'user_id' => $vars['id'],
+            'user' => $arUser,
+            'profile' => $arProfile,
         ]);
 
     }
