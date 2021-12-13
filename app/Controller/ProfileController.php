@@ -9,7 +9,7 @@ class ProfileController extends BaseController
 {
 
     /**
-     * Выводит форму редактирования профиля пользователя
+     * Выводит профиль пользователя
      * @return void
      * @throws QueryBuilderException
      */
@@ -35,22 +35,15 @@ class ProfileController extends BaseController
      * Выводит форму редактирования профиля пользователя
      * @param $vars
      * @return void
+     * @throws QueryBuilderException
      */
     public function profileEdit($vars)
     {
 
         $this->checkAccess();
 
-        try {
-
-            //Получаем профиль пользователя по ID пользователя
-            $arProfile = $this->query->getProfileByUserId('profile', $vars['id']);
-
-        } catch (QueryBuilderException $exception) {
-
-            $this->flash->error($exception->getMessage());
-
-        }
+        //Получаем профиль пользователя по ID пользователя
+        $arProfile = $this->query->getProfileByUserId('profile', $vars['id']);
 
         echo $this->engine->render('edit.view', [
             'profile' => $arProfile,
@@ -62,6 +55,7 @@ class ProfileController extends BaseController
     /**
      * Обрабатывает запрос на редактирование профиля
      * @return void
+     * @throws QueryBuilderException
      */
     public function postProfileEdit($vars)
     {
@@ -86,17 +80,7 @@ class ProfileController extends BaseController
 
         } else {
 
-            try {
-
-                $this->query->update('profile', $profileId, $arProfile);
-
-                $this->flash->success('Данные сохранены');
-
-            } catch (QueryBuilderException $exception) {
-
-                $this->flash->error($exception->getMessage());
-
-            }
+            $this->query->update('profile', $profileId, $arProfile);
 
         }
 

@@ -34,6 +34,7 @@ class MediaController extends BaseController
     /**
      * Обрабатывает запрос на добавление фотографии
      * @return void
+     * @throws QueryBuilderException
      */
     public function postProfileMediaEdit($vars)
     {
@@ -52,18 +53,9 @@ class MediaController extends BaseController
 
         } else {
 
-            try {
+            $this->query->update('profile', $profileId, ['photo' => $this->addPhoto($arPhoto)]);
 
-                $this->query->update('profile', $profileId, ['photo' => $this->addPhoto($arPhoto)]);
-
-                $this->flash->success('Данные сохранены');
-
-            } catch (QueryBuilderException $exception) {
-
-                $this->flash->error($exception->getMessage());
-
-            }
-
+            $this->flash->success('Данные сохранены');
         }
 
         $arProfile = $this->query->getProfileByUserId('profile', $vars['id']);

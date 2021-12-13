@@ -10,22 +10,15 @@ class UsersController extends BaseController
     /**
      * Возвращает список пользователей
      * @return void
+     * @throws QueryBuilderException
      */
     public function users()
     {
 
         $this->checkAccess();
 
-        try {
-
-            $users = $this->query->getAll('users');
-            $profile = $this->query->getAll('profile');
-
-        } catch (QueryBuilderException $exception) {
-
-            $this->flash->error($exception->getMessage());
-
-        }
+        $users = $this->query->getAll('users');
+        $profile = $this->query->getAll('profile');
 
         echo $this->engine->render('users.view', [
             'users' => $users,

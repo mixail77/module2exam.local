@@ -8,7 +8,6 @@ $this->layout('layout', [
 ]);
 
 ?>
-
 <main id="js-page-content" role="main" class="page-content mt-3">
     <div class="subheader">
         <h1 class="subheader-title">
@@ -16,7 +15,7 @@ $this->layout('layout', [
         </h1>
     </div>
     <?= Flash::display() ?>
-    <form action="/profile/12/security/" method="post">
+    <form action="/profile/<?= $user['id'] ?>/security/" method="post">
         <div class="row">
             <div class="col-xl-6">
                 <div id="panel-1" class="panel">
@@ -27,15 +26,15 @@ $this->layout('layout', [
                         <div class="panel-content">
                             <div class="form-group">
                                 <label class="form-label" for="simpleinput">Email</label>
-                                <input type="text" id="simpleinput" class="form-control" value="john@example.com">
+                                <input type="text" name="email" id="simpleinput" class="form-control" value="<?= $user['email'] ?>">
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="simpleinput">Пароль</label>
-                                <input type="password" id="simpleinput" class="form-control">
+                                <label class="form-label" for="simpleinput">Введите текущий пароль</label>
+                                <input type="password" name="old_password" id="simpleinput" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="simpleinput">Подтверждение пароля</label>
-                                <input type="password" id="simpleinput" class="form-control">
+                                <label class="form-label" for="simpleinput">Введите новый пароль</label>
+                                <input type="password" name="new_password" id="simpleinput" class="form-control">
                             </div>
                             <div class="col-md-12 mt-3 d-flex flex-row-reverse">
                                 <button class="btn btn-warning">Изменить</button>

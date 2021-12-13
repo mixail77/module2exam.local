@@ -66,18 +66,10 @@ class StatusController extends BaseController
 
         } else {
 
-            try {
+            //Обновляем профиль пользователя
+            $this->query->update('profile', $profileId, $arProfile);
 
-                //Обновляем профиль пользователя
-                $this->query->update('profile', $profileId, $arProfile);
-
-                $this->flash->success('Данные сохранены');
-
-            } catch (QueryBuilderException $exception) {
-
-                $this->flash->error($exception->getMessage());
-
-            }
+            $this->flash->success('Данные сохранены');
 
         }
 
