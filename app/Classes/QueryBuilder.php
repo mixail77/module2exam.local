@@ -226,4 +226,46 @@ class QueryBuilder
 
     }
 
+    /**
+     * Получает всех пользователей с профилями
+     * @return array|false
+     */
+    public function getAllUser()
+    {
+
+        //Sql запрос
+        $select = $this->query->newSelect();
+        $select->cols([
+            'users.id',
+            'users.email',
+            'profile.user_id',
+            'profile.name',
+            'profile.phone',
+            'profile.address',
+            'profile.job',
+            'profile.photo',
+            'profile.vk',
+            'profile.instagram',
+            'profile.telegram',
+            'profile.status_id',
+            'status.info',
+            'status.code',
+        ]);
+        $select->from('users');
+        $select->from('profile');
+        $select->from('status');
+        $select->where('profile.user_id = users.id');
+        $select->where('status.id = profile.status_id');
+
+        //Подготавливаем запрос
+        $sql = $select->getStatement();
+        $statement = $this->pdo->prepare($sql);
+
+        //Выполняем запрос
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
 }

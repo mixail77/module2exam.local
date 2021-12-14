@@ -71,6 +71,8 @@ class BaseController
     public function isAdmin()
     {
 
+        //roles_mask
+
         if ($this->auth->hasRole(Role::ADMIN)) {
 
             return true;
@@ -100,7 +102,7 @@ class BaseController
     }
 
     /**
-     * Проверяет доступ для гостей и участников системы
+     * Проверяет доступ к ресурсу
      * @param $type
      * @return void
      */
@@ -120,7 +122,25 @@ class BaseController
             $this->redirect->redirectTo();
 
         }
-        
+
+    }
+
+    /**
+     * Проверяет доступ к профилю
+     * @param $id
+     * @return void
+     */
+    public function checkAccessProfile($id)
+    {
+
+        if (!$this->isAdmin() && !$this->isMyProfile($id)) {
+
+            return true;
+
+        }
+
+        return false;
+
     }
 
 }

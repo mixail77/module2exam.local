@@ -39,6 +39,10 @@ class AuthController extends BaseController
 
         $this->checkAccess('guest');
 
+        $email = $this->request->getPost('email');
+        $password = $this->request->getPost('password');
+        $remember = $this->request->getPost('remember');
+
         $validator = new Validator($this->request->getAllPost());
         $validator->rule('required', ['email', 'password']);
         $validator->rule('email', 'email');
@@ -47,7 +51,7 @@ class AuthController extends BaseController
 
             $this->flash->error('Ошибка. Неверный E-mail или пароль');
 
-        } else if ($this->authUser()) {
+        } else if ($this->authUser($email, $password, $remember)) {
 
             $this->flash->success('Вы авторизованы');
 
@@ -57,9 +61,9 @@ class AuthController extends BaseController
         }
 
         echo $this->engine->render('authorize.view', [
-            'email' => $this->request->getPost('email'),
-            'password' => $this->request->getPost('password'),
-            'remember' => $this->request->getPost('remember'),
+            'email' => $email,
+            'password' => $password,
+            'remember' => $remember,
         ]);
 
     }
@@ -70,18 +74,18 @@ class AuthController extends BaseController
      * @throws AttemptCancelledException
      * @throws AuthError
      */
-    private function authUser()
+    private function authUser($email, $password, $remember)
     {
 
         try {
 
-            if ($this->request->getPost('remember') === 'Y') {
+            if ($remember === 'Y') {
 
                 $this->duration = (int)(60 * 60 * 24 * 365.25);
 
             }
 
-            $this->auth->login($this->request->getPost('email'), $this->request->getPost('password'), $this->duration);
+            $this->auth->login($email, $password, $this->duration);
 
             return true;
 

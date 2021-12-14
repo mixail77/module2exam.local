@@ -20,7 +20,7 @@ class DeleteController extends BaseController
 
         if ($this->deleteUser($vars['id'])) {
 
-            $this->redirect->redirectTo();
+            $this->flash->success('Пользователь удален');
 
         }
 
@@ -43,7 +43,19 @@ class DeleteController extends BaseController
 
             try {
 
+                //Профиль пользователя
+                $arProfile = $this->query->getProfileByUserId('profile', $userId);
+
+                //Удаляем фотографию
+                unlink($_SERVER['DOCUMENT_ROOT'] . '/public/' . $arProfile['photo']);
+
+                //Удаляем профиль
+                $this->query->delete('profile', $arProfile['id']);
+
+                //Удаляем пользователя
                 $this->auth->admin()->deleteUserById($userId);
+
+                //Завершаем сессию пользователя
                 $this->auth->logOut();
 
                 return true;

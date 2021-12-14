@@ -18,11 +18,6 @@ class RegisterController extends BaseController
 
     const STATUS_DEFAULT = 4;
 
-    private $userId;
-    private $email;
-    private $selector;
-    private $token;
-
     /**
      * Выводит форму регистрации
      * @return void
@@ -46,6 +41,9 @@ class RegisterController extends BaseController
 
         $this->checkAccess('guest');
 
+        $email = $this->request->getPost('email');
+        $password = $this->request->getPost('password');
+
         $validator = new Validator($this->request->getAllPost());
         $validator->rule('required', ['email', 'password']);
         $validator->rule('email', 'email');
@@ -54,7 +52,7 @@ class RegisterController extends BaseController
 
             $this->flash->error('Ошибка. Неверный E-mail или пароль');
 
-        } else if ($this->createUser() && $this->createProfile() && $this->sendConfirm()) {
+        } else if ($this->createUser($email, $password)) {
 
             $this->flash->success('Вы зарегистрированы. На указанный E-mail отправлено письмо для активации учетной записи');
 
@@ -64,8 +62,8 @@ class RegisterController extends BaseController
         }
 
         echo $this->engine->render('register.view', [
-            'email' => $this->request->getPost('email'),
-            'password' => $this->request->getPost('password'),
+            'email' => $email,
+            'password' => $password,
         ]);
 
     }
@@ -75,21 +73,19 @@ class RegisterController extends BaseController
      * @return bool
      * @throws AuthError
      */
-    private function createUser()
+    private function createUser($email, $password)
     {
 
         try {
 
-            $userId = $this->auth->register($this->request->getPost('email'), $this->request->getPost('password'), '', function ($selector, $token) {
-                $this->selector = $selector;
-                $this->token = $token;
+            $userId = $this->auth->register($email, $password, '', function ($selector, $token) use ($email) {
+
+                //Отправляем ссылку на подтверждение
+                $this->sendConfirm($selector, $token, $email);
             });
 
-            //ID пользователя
-            $this->userId = $userId;
-
-            //Email пользователя
-            $this->email = $this->request->getPost('email');
+            //Добавляем профиль пользователя
+            $this->createProfile($userId);
 
             return true;
 
@@ -116,45 +112,18 @@ class RegisterController extends BaseController
     }
 
     /**
-     * Создает профиль пользователя
-     * @return bool
-     */
-    private function createProfile()
-    {
-
-        try {
-
-            $this->query->create('profile', [
-                'user_id' => $this->userId,
-                'status_id' => self::STATUS_DEFAULT,
-
-            ]);
-
-            return true;
-
-        } catch (QueryBuilderException $exception) {
-
-            $this->flash->error('Ошибка. Не создан профиль пользователя');
-
-        }
-
-        return false;
-
-    }
-
-    /**
      * Отправляет ссылку для подтверждения регистрации пользователя
      * @return bool
      */
-    private function sendConfirm()
+    private function sendConfirm($selector, $token, $email)
     {
 
         try {
 
-            $confirmUrl = 'http://' . $this->request->getServer('SERVER_NAME') . '/confirm/?selector=' . $this->selector . '&token=' . $this->token;
+            $confirmUrl = 'http://' . $this->request->getServer('SERVER_NAME') . '/confirm/?selector=' . $selector . '&token=' . $token;
             $message = 'Подтверждение регистрации: ' . $confirmUrl;
 
-            $this->mail->setTo($this->email, $this->email);
+            $this->mail->setTo($email, $email);
             $this->mail->setFrom('confirm@yandex.ru', 'confirm@yandex.ru');
             $this->mail->setSubject('Подтверждение регистрации');
             $this->mail->setMessage($message);
@@ -173,12 +142,58 @@ class RegisterController extends BaseController
     }
 
     /**
-     * Подтверждает регистрацию пользователя по ссылке
+     * Создает профиль пользователя
+     * @return bool
+     */
+    private function createProfile($userId)
+    {
+
+        $name = $this->request->getPost('name');
+        $phone = $this->request->getPost('phone');
+        $address = $this->request->getPost('address');
+        $job = $this->request->getPost('job');
+        $photo = $this->request->getPost('photo');
+        $vk = $this->request->getPost('vk');
+        $instagram = $this->request->getPost('instagram');
+        $telegram = $this->request->getPost('telegram');
+
+        try {
+
+            $this->query->create('profile', [
+                'user_id' => $userId,
+                'name' => $name,
+                'phone' => $phone,
+                'address' => $address,
+                'job' => $job,
+                'photo' => $photo,
+                'vk' => $vk,
+                'instagram' => $instagram,
+                'telegram' => $telegram,
+                'status_id' => self::STATUS_DEFAULT,
+            ]);
+
+            return true;
+
+        } catch (QueryBuilderException $exception) {
+
+            $this->flash->error('Ошибка. Не создан профиль пользователя');
+
+        }
+
+        return false;
+
+    }
+
+    /**
+     * Обрабатывает запрос на подтверждение Email адреса пользователя
      * @return void
      * @throws AuthError
      */
     public function confirmRegister()
     {
+
+        $selector = $this->request->getQuery('selector');
+        $token = $this->request->getQuery('token');
 
         $validator = new Validator($this->request->getAllQuery());
         $validator->rule('required', ['selector', 'token']);
@@ -187,35 +202,51 @@ class RegisterController extends BaseController
 
             $this->flash->error('Ошибка. Неверная ссылка для подтверждения регистрации');
 
-        } else {
+        } else if ($this->confirmEmail($selector, $token)) {
 
-            try {
-
-                $this->auth->confirmEmail($this->request->getQuery('selector'), $this->request->getQuery('token'));
-
-                $this->flash->success('Регистрация подтверждена');
-
-            } catch (InvalidSelectorTokenPairException $exception) {
-
-                $this->flash->error('Ошибка. Неверный токен');
-
-            } catch (TokenExpiredException $exception) {
-
-                $this->flash->error('Ошибка. Срок действия токена истек');
-
-            } catch (UserAlreadyExistsException $exception) {
-
-                $this->flash->error('Ошибка. E-mail уже существует');
-
-            } catch (TooManyRequestsException $exception) {
-
-                $this->flash->error('Ошибка. Слишком много запросов');
-
-            }
+            $this->flash->success('Регистрация подтверждена');
 
         }
 
         echo $this->engine->render('register.view', []);
+
+    }
+
+    /**
+     * Подтверждает Email адрес пользователя
+     * @param $selector
+     * @param $token
+     * @return bool
+     * @throws AuthError
+     */
+    public function confirmEmail($selector, $token)
+    {
+
+        try {
+
+            $this->auth->confirmEmail($selector, $token);
+
+            return true;
+
+        } catch (InvalidSelectorTokenPairException $exception) {
+
+            $this->flash->error('Ошибка. Неверный токен');
+
+        } catch (TokenExpiredException $exception) {
+
+            $this->flash->error('Ошибка. Срок действия токена истек');
+
+        } catch (UserAlreadyExistsException $exception) {
+
+            $this->flash->error('Ошибка. E-mail уже существует');
+
+        } catch (TooManyRequestsException $exception) {
+
+            $this->flash->error('Ошибка. Слишком много запросов');
+
+        }
+
+        return false;
 
     }
 

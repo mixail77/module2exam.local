@@ -32,7 +32,7 @@ $this->layout('layout', [
                                         <label class="form-label" for="example-select">Выберите статус</label>
                                         <select class="form-control" id="example-select" name="status_id">
                                             <? foreach($status as $value): ?>
-                                                <option value="<?= $value['id'] ?>" <?=($value['id'] == $profile['status_id']) ? 'selected' : ''?>><?= $value['name'] ?></option>
+                                                <option value="<?= $value['id'] ?>" <?=($value['id'] == $profile['status_id']) ? 'selected' : ''?>><?= $value['info'] ?></option>
                                             <? endforeach; ?>
                                         </select>
                                     </div>

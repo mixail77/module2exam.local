@@ -9,7 +9,6 @@ use Delight\Auth\InvalidEmailException;
 use Delight\Auth\InvalidPasswordException;
 use Delight\Auth\NotLoggedInException;
 use Delight\Auth\TooManyRequestsException;
-use Delight\Auth\UnknownIdException;
 use Delight\Auth\UserAlreadyExistsException;
 use Valitron\Validator;
 
@@ -19,7 +18,7 @@ class SecurityController extends BaseController
     /**
      * Выводит форму редактирования пароля
      * @return void
-     * @throws \App\Exception\QueryBuilderException
+     * @throws QueryBuilderException
      */
     public function profileSecurity($vars)
     {
@@ -38,7 +37,7 @@ class SecurityController extends BaseController
     /**
      * Обрабатывает запрос на редактирование пароля
      * @return void
-     * @throws QueryBuilderException
+     * @throws QueryBuilderException|AuthError
      */
     public function postProfileSecurityEdit($vars)
     {
@@ -49,10 +48,14 @@ class SecurityController extends BaseController
         $oldPassword = $this->request->getPost('old_password');
         $newPassword = $this->request->getPost('new_password');
 
+        //Пользователь
+        $arUser = $this->query->getById('users', $vars['id']);
+
         $validator = new Validator($this->request->getAllPost());
         $validator->rule('required', ['email']);
         $validator->rule('email', 'email');
 
+        //Если передан новый пароль
         if (!empty($newPassword)) {
 
             $validator->rule('required', ['old_password', 'new_password']);
@@ -63,7 +66,7 @@ class SecurityController extends BaseController
 
             $this->flash->error('Ошибка валидации');
 
-        } else if ($this->changeEmail($oldPassword, $email) && $this->changePassword($vars['id'], $newPassword)) {
+        } else if ($this->changeEmail($oldPassword, $email, $arUser['email']) && $this->changePassword($oldPassword, $newPassword)) {
 
             $this->flash->success('Данные сохранены');
 
@@ -80,28 +83,38 @@ class SecurityController extends BaseController
 
     /**
      * Меняет E-mail пользователя
-     * @param $password
-     * @param $email
+     * @param $oldPassword
+     * @param $newEmail
+     * @param $oldEmail
      * @return false
      * @throws AuthError
      */
-    public function changeEmail($password, $email)
+    public function changeEmail($oldPassword, $newEmail, $oldEmail)
     {
 
         try {
 
-            if ($this->auth->reconfirmPassword($password)) {
+            if ($this->auth->reconfirmPassword($oldPassword)) {
 
-                $this->auth->changeEmail($email, function ($selector, $token) {
+                //Если старый и новый Email не совпадают
+                if ($newEmail != $oldEmail) {
 
-                    $this->auth->confirmEmail($selector, $token);
+                    $this->auth->changeEmail($newEmail, function ($selector, $token) {
 
-                    return true;
+                        //Подтверждаем адрес
+                        $this->auth->confirmEmail($selector, $token);
 
-                });
+                    });
+
+                }
+
+                return true;
+
+            } else {
+
+                $this->flash->error('Ошибка. Введите текущий пароль');
+
             }
-
-            $this->flash->error('Ошибка. Введите текущий пароль');
 
         } catch (InvalidEmailException $exception) {
 
@@ -131,33 +144,36 @@ class SecurityController extends BaseController
 
     /**
      * Меняет пароль пользователя
-     * @param $userId
-     * @param $password
+     * @param $oldPassword
+     * @param $newPassword
      * @return bool
      * @throws AuthError
      */
-    public function changePassword($userId, $password)
+    public function changePassword($oldPassword, $newPassword)
     {
-
-        if (empty($password)) {
-
-            return true;
-
-        }
 
         try {
 
-            $this->auth->admin()->changePasswordForUserById($userId, $password);
+            //Если передан новый пароль
+            if (!empty($newPassword)) {
+
+                $this->auth->changePassword($oldPassword, $newPassword);
+
+            }
 
             return true;
 
-        } catch (UnknownIdException $exception) {
+        } catch (NotLoggedInException $exception) {
 
-            $this->flash->error('Ошибка. Пользователь не найден');
+            $this->flash->error('Ошибка. Пользователь не авторизован');
 
         } catch (InvalidPasswordException $exception) {
 
             $this->flash->error('Ошибка. Неверный пароль');
+
+        } catch (TooManyRequestsException $exception) {
+
+            $this->flash->error('Ошибка. Слишком много запросов');
 
         }
 

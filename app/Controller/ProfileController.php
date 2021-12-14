@@ -62,13 +62,17 @@ class ProfileController extends BaseController
 
         $this->checkAccess();
 
+        $name = $this->request->getPost('name');
+        $job = $this->request->getPost('job');
+        $phone = $this->request->getPost('phone');
+        $address = $this->request->getPost('address');
         $profileId = $this->request->getPost('profile_id');
 
         $arProfile = [
-            'name' => $this->request->getPost('name'),
-            'job' => $this->request->getPost('job'),
-            'phone' => $this->request->getPost('phone'),
-            'address' => $this->request->getPost('address'),
+            'name' => $name,
+            'job' => $job,
+            'phone' => $phone,
+            'address' => $address,
         ];
 
         $validator = new Validator($this->request->getAllPost());
@@ -81,6 +85,8 @@ class ProfileController extends BaseController
         } else {
 
             $this->query->update('profile', $profileId, $arProfile);
+
+            $this->flash->success('Данные сохранены');
 
         }
 

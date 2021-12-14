@@ -2,6 +2,12 @@
 
 namespace App\Controller;
 
+use App\Controller\RegisterController;
+use App\Controller\ProfileController;
+use App\Controller\MediaController;
+use App\Controller\SecurityController;
+use App\Controller\StatusController;
+
 class СreateController extends BaseController
 {
 
@@ -26,6 +32,8 @@ class СreateController extends BaseController
     {
 
         $this->checkAccess();
+
+        
 
         echo $this->engine->render('create.view', []);
 
