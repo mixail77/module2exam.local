@@ -6,19 +6,24 @@ use App\Classes\QueryBuilder;
 use App\Classes\Redirect;
 use App\Classes\Request;
 use App\Exception\QueryBuilderException;
+use Delight\Auth\AttemptCancelledException;
 use Delight\Auth\Auth;
 use Delight\Auth\AuthError;
+use Delight\Auth\EmailNotVerifiedException;
 use Delight\Auth\InvalidEmailException;
 use Delight\Auth\InvalidPasswordException;
+use Delight\Auth\InvalidSelectorTokenPairException;
+use Delight\Auth\NotLoggedInException;
 use Delight\Auth\Role;
+use Delight\Auth\TokenExpiredException;
 use Delight\Auth\TooManyRequestsException;
 use Delight\Auth\UserAlreadyExistsException;
 use Intervention\Image\ImageManager;
 use League\Plates\Engine;
 use League\Plates\Extension\Asset;
+use RuntimeException;
 use SimpleMail;
 use Tamtamchik\SimpleFlash\Flash;
-use RuntimeException;
 
 class BaseController
 {
@@ -152,6 +157,51 @@ class BaseController
 
     }
 
+    /* Авторизация */
+
+    /**
+     * Авторизует и запоминает пользователя
+     * @return bool
+     * @throws AttemptCancelledException
+     * @throws AuthError
+     */
+    protected function authUser($email, $password, $remember)
+    {
+
+        try {
+
+            if ($remember === 'Y') {
+
+                $duration = (int)(60 * 60 * 24 * 365.25);
+
+            }
+
+            $this->auth->login($email, $password, $duration);
+
+            return true;
+
+        } catch (InvalidEmailException $exception) {
+
+            $this->flash->error('Ошибка. Неверный E-mail');
+
+        } catch (InvalidPasswordException $exception) {
+
+            $this->flash->error('Ошибка. Неверный пароль');
+
+        } catch (EmailNotVerifiedException $exception) {
+
+            $this->flash->error('Ошибка. E-mail не подтвержден');
+
+        } catch (TooManyRequestsException $exception) {
+
+            $this->flash->error('Ошибка. Слишком много запросов');
+
+        }
+
+        return false;
+
+    }
+
     /* Регистрация */
 
     /**
@@ -231,7 +281,7 @@ class BaseController
     }
 
     /**
-     * Создает профиль пользователя
+     * Добавляет профиль пользователя
      * @return bool
      */
     private function createProfile($userId)
@@ -247,6 +297,46 @@ class BaseController
         } catch (QueryBuilderException $exception) {
 
             $this->flash->error('Ошибка. Не создан профиль пользователя');
+
+        }
+
+        return false;
+
+    }
+
+    /* Подтверждение E-mail */
+
+    /**
+     * Подтверждает Email адрес пользователя
+     * @param $selector
+     * @param $token
+     * @return bool
+     * @throws AuthError
+     */
+    public function confirmEmail($selector, $token)
+    {
+
+        try {
+
+            $this->auth->confirmEmail($selector, $token);
+
+            return true;
+
+        } catch (InvalidSelectorTokenPairException $exception) {
+
+            $this->flash->error('Ошибка. Неверный токен');
+
+        } catch (TokenExpiredException $exception) {
+
+            $this->flash->error('Ошибка. Срок действия токена истек');
+
+        } catch (UserAlreadyExistsException $exception) {
+
+            $this->flash->error('Ошибка. E-mail уже существует');
+
+        } catch (TooManyRequestsException $exception) {
+
+            $this->flash->error('Ошибка. Слишком много запросов');
 
         }
 
@@ -286,7 +376,7 @@ class BaseController
     }
 
     /**
-     * Загружает и сохраняет новую фотографию
+     * Сохраняет новую фотографию
      * @param $arPhoto
      * @return string
      */
@@ -301,6 +391,108 @@ class BaseController
         $image->save($_SERVER['DOCUMENT_ROOT'] . '/public/' . $photoPath);
 
         return $photoPath;
+
+    }
+
+    /* Безопасность */
+
+    /**
+     * Меняет E-mail пользователя
+     * @param $oldPassword
+     * @param $newEmail
+     * @param $oldEmail
+     * @return false
+     * @throws AuthError
+     */
+    public function changeEmail($oldPassword, $newEmail, $oldEmail)
+    {
+
+        try {
+
+            if ($this->auth->reconfirmPassword($oldPassword)) {
+
+                //Если старый и новый Email не совпадают
+                if ($newEmail != $oldEmail) {
+
+                    $this->auth->changeEmail($newEmail, function ($selector, $token) {
+
+                        //Подтверждаем адрес
+                        $this->auth->confirmEmail($selector, $token);
+
+                    });
+
+                }
+
+                return true;
+
+            } else {
+
+                $this->flash->error('Ошибка. Введите текущий пароль');
+
+            }
+
+        } catch (InvalidEmailException $exception) {
+
+            $this->flash->error('Ошибка. Неверный E-mail');
+
+        } catch (UserAlreadyExistsException $exception) {
+
+            $this->flash->error('Ошибка. E-mail уже существует');
+
+        } catch (EmailNotVerifiedException $exception) {
+
+            $this->flash->error('Ошибка. Аккаунт не подтвержден');
+
+        } catch (NotLoggedInException $exception) {
+
+            $this->flash->error('Ошибка. Пользователь не авторизован');
+
+        } catch (TooManyRequestsException $exception) {
+
+            $this->flash->error('Ошибка. Слишком много запросов');
+
+        }
+
+        return false;
+
+    }
+
+    /**
+     * Меняет пароль пользователя
+     * @param $oldPassword
+     * @param $newPassword
+     * @return bool
+     * @throws AuthError
+     */
+    public function changePassword($oldPassword, $newPassword)
+    {
+
+        try {
+
+            //Если передан новый пароль
+            if (!empty($newPassword)) {
+
+                $this->auth->changePassword($oldPassword, $newPassword);
+
+            }
+
+            return true;
+
+        } catch (NotLoggedInException $exception) {
+
+            $this->flash->error('Ошибка. Пользователь не авторизован');
+
+        } catch (InvalidPasswordException $exception) {
+
+            $this->flash->error('Ошибка. Неверный пароль');
+
+        } catch (TooManyRequestsException $exception) {
+
+            $this->flash->error('Ошибка. Слишком много запросов');
+
+        }
+
+        return false;
 
     }
 

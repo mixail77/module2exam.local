@@ -4,10 +4,6 @@ namespace App\Controller;
 
 use Delight\Auth\AttemptCancelledException;
 use Delight\Auth\AuthError;
-use Delight\Auth\EmailNotVerifiedException;
-use Delight\Auth\InvalidEmailException;
-use Delight\Auth\InvalidPasswordException;
-use Delight\Auth\TooManyRequestsException;
 use Valitron\Validator;
 
 class AuthController extends BaseController
@@ -63,49 +59,6 @@ class AuthController extends BaseController
             'password' => $password,
             'remember' => $remember,
         ]);
-
-    }
-
-    /**
-     * Авторизует и запоминает пользователя
-     * @return bool
-     * @throws AttemptCancelledException
-     * @throws AuthError
-     */
-    private function authUser($email, $password, $remember)
-    {
-
-        try {
-
-            if ($remember === 'Y') {
-
-                $duration = (int)(60 * 60 * 24 * 365.25);
-
-            }
-
-            $this->auth->login($email, $password, $duration);
-
-            return true;
-
-        } catch (InvalidEmailException $exception) {
-
-            $this->flash->error('Ошибка. Неверный E-mail');
-
-        } catch (InvalidPasswordException $exception) {
-
-            $this->flash->error('Ошибка. Неверный пароль');
-
-        } catch (EmailNotVerifiedException $exception) {
-
-            $this->flash->error('Ошибка. E-mail не подтвержден');
-
-        } catch (TooManyRequestsException $exception) {
-
-            $this->flash->error('Ошибка. Слишком много запросов');
-
-        }
-
-        return false;
 
     }
 

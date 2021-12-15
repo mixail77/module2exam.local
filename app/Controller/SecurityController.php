@@ -4,12 +4,6 @@ namespace App\Controller;
 
 use App\Exception\QueryBuilderException;
 use Delight\Auth\AuthError;
-use Delight\Auth\EmailNotVerifiedException;
-use Delight\Auth\InvalidEmailException;
-use Delight\Auth\InvalidPasswordException;
-use Delight\Auth\NotLoggedInException;
-use Delight\Auth\TooManyRequestsException;
-use Delight\Auth\UserAlreadyExistsException;
 use Valitron\Validator;
 
 class SecurityController extends BaseController
@@ -78,106 +72,6 @@ class SecurityController extends BaseController
         echo $this->engine->render('security.view', [
             'user' => $arUser,
         ]);
-
-    }
-
-    /**
-     * Меняет E-mail пользователя
-     * @param $oldPassword
-     * @param $newEmail
-     * @param $oldEmail
-     * @return false
-     * @throws AuthError
-     */
-    public function changeEmail($oldPassword, $newEmail, $oldEmail)
-    {
-
-        try {
-
-            if ($this->auth->reconfirmPassword($oldPassword)) {
-
-                //Если старый и новый Email не совпадают
-                if ($newEmail != $oldEmail) {
-
-                    $this->auth->changeEmail($newEmail, function ($selector, $token) {
-
-                        //Подтверждаем адрес
-                        $this->auth->confirmEmail($selector, $token);
-
-                    });
-
-                }
-
-                return true;
-
-            } else {
-
-                $this->flash->error('Ошибка. Введите текущий пароль');
-
-            }
-
-        } catch (InvalidEmailException $exception) {
-
-            $this->flash->error('Ошибка. Неверный E-mail');
-
-        } catch (UserAlreadyExistsException $exception) {
-
-            $this->flash->error('Ошибка. E-mail уже существует');
-
-        } catch (EmailNotVerifiedException $exception) {
-
-            $this->flash->error('Ошибка. Аккаунт не подтвержден');
-
-        } catch (NotLoggedInException $exception) {
-
-            $this->flash->error('Ошибка. Пользователь не авторизован');
-
-        } catch (TooManyRequestsException $exception) {
-
-            $this->flash->error('Ошибка. Слишком много запросов');
-
-        }
-
-        return false;
-
-    }
-
-    /**
-     * Меняет пароль пользователя
-     * @param $oldPassword
-     * @param $newPassword
-     * @return bool
-     * @throws AuthError
-     */
-    public function changePassword($oldPassword, $newPassword)
-    {
-
-        try {
-
-            //Если передан новый пароль
-            if (!empty($newPassword)) {
-
-                $this->auth->changePassword($oldPassword, $newPassword);
-
-            }
-
-            return true;
-
-        } catch (NotLoggedInException $exception) {
-
-            $this->flash->error('Ошибка. Пользователь не авторизован');
-
-        } catch (InvalidPasswordException $exception) {
-
-            $this->flash->error('Ошибка. Неверный пароль');
-
-        } catch (TooManyRequestsException $exception) {
-
-            $this->flash->error('Ошибка. Слишком много запросов');
-
-        }
-
-        return false;
 
     }
 

@@ -56,9 +56,6 @@ class DeleteController extends BaseController
                 //Удаляем пользователя
                 $this->auth->admin()->deleteUserById($userId);
 
-                //Завершаем сессию пользователя
-                $this->auth->logOut();
-
                 return true;
 
             } catch (UnknownIdException $exception) {

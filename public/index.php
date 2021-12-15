@@ -1,15 +1,16 @@
 <?php
 
 use App\Controller\AuthController;
+use App\Controller\DeleteController;
 use App\Controller\ErrorController;
-use App\Controller\ProfileController;
 use App\Controller\LogoutController;
+use App\Controller\MediaController;
+use App\Controller\ProfileController;
 use App\Controller\RegisterController;
 use App\Controller\SecurityController;
-use App\Controller\DeleteController;
 use App\Controller\StatusController;
 use App\Controller\UsersController;
-use App\Controller\MediaController;
+use App\Controller\ConfirmController;
 use App\Controller\СreateController;
 use Aura\SqlQuery\QueryFactory;
 use Delight\Auth\Auth;
@@ -55,7 +56,8 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $rou
     //Регистрация
     $rout->addRoute('GET', '/register/', [RegisterController::class, 'register']);
     $rout->addRoute('POST', '/register/', [RegisterController::class, 'handlerRegister']);
-    $rout->addRoute('GET', '/confirm/', [RegisterController::class, 'confirmRegister']);
+    //Активация аккаунта
+    $rout->addRoute('GET', '/confirm/', [ConfirmController::class, 'confirm']);
     //Список пользователей
     $rout->addRoute('GET', '/users/', [UsersController::class, 'users']);
     //Добавить пользователя
