@@ -17,6 +17,7 @@ use Delight\Auth\NotLoggedInException;
 use Delight\Auth\Role;
 use Delight\Auth\TokenExpiredException;
 use Delight\Auth\TooManyRequestsException;
+use Delight\Auth\UnknownIdException;
 use Delight\Auth\UserAlreadyExistsException;
 use Intervention\Image\ImageManager;
 use League\Plates\Engine;
@@ -489,6 +490,51 @@ class BaseController
         } catch (TooManyRequestsException $exception) {
 
             $this->flash->error('Ошибка. Слишком много запросов');
+
+        }
+
+        return false;
+
+    }
+
+    /* Удаление */
+
+    /**
+     * Удаляет пользователя по ID
+     * @param $userId
+     * @return bool
+     * @throws AuthError|QueryBuilderException
+     */
+    public function deleteUser($userId)
+    {
+
+        if (!$this->isMyProfile($userId)) {
+
+            try {
+
+                //Профиль пользователя
+                $arProfile = $this->query->getProfileByUserId('profile', $userId);
+
+                //Удаляем фотографию
+                unlink($_SERVER['DOCUMENT_ROOT'] . '/public/' . $arProfile['photo']);
+
+                //Удаляем профиль
+                $this->query->delete('profile', $arProfile['id']);
+
+                //Удаляем пользователя
+                $this->auth->admin()->deleteUserById($userId);
+
+                return true;
+
+            } catch (UnknownIdException $exception) {
+
+                $this->flash->error('Ошибка. Пользователь не найден');
+
+            }
+
+        } else {
+
+            $this->flash->error('Ошибка. Нельзя удалить самого себя');
 
         }
 

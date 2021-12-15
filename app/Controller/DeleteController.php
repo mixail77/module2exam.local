@@ -31,47 +31,4 @@ class DeleteController extends BaseController
 
     }
 
-    /**
-     * Удаляет пользователя по ID
-     * @param $userId
-     * @return bool
-     * @throws AuthError|QueryBuilderException
-     */
-    public function deleteUser($userId)
-    {
-
-        if (!$this->isMyProfile($userId)) {
-
-            try {
-
-                //Профиль пользователя
-                $arProfile = $this->query->getProfileByUserId('profile', $userId);
-
-                //Удаляем фотографию
-                unlink($_SERVER['DOCUMENT_ROOT'] . '/public/' . $arProfile['photo']);
-
-                //Удаляем профиль
-                $this->query->delete('profile', $arProfile['id']);
-
-                //Удаляем пользователя
-                $this->auth->admin()->deleteUserById($userId);
-
-                return true;
-
-            } catch (UnknownIdException $exception) {
-
-                $this->flash->error('Ошибка. Пользователь не найден');
-
-            }
-
-        } else {
-
-            $this->flash->error('Ошибка. Нельзя удалить самого себя');
-
-        }
-
-        return false;
-
-    }
-
 }

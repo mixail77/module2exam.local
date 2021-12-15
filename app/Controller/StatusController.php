@@ -11,25 +11,18 @@ class StatusController extends BaseController
     /**
      * Выводит форму редактирования статуса
      * @return void
+     * @throws QueryBuilderException
      */
     public function profileStatus($vars)
     {
 
         $this->checkAccess();
 
-        try {
+        //Получаем список доступных статусов
+        $arStatus = $this->query->getAll('status');
 
-            //Получаем список доступных статусов
-            $arStatus = $this->query->getAll('status');
-
-            //Получаем профиль пользователя по ID пользователя
-            $arProfile = $this->query->getProfileByUserId('profile', $vars['id']);
-
-        } catch (QueryBuilderException $exception) {
-
-            $this->flash->error($exception->getMessage());
-
-        }
+        //Получаем профиль пользователя по ID пользователя
+        $arProfile = $this->query->getProfileByUserId('profile', $vars['id']);
 
         echo $this->engine->render('status.view', [
             'profile' => $arProfile,
