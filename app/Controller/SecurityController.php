@@ -39,7 +39,7 @@ class SecurityController extends BaseController
      * @return void
      * @throws QueryBuilderException|AuthError
      */
-    public function postProfileSecurityEdit($vars)
+    public function handlerProfileSecurity($vars)
     {
 
         $this->checkAccess();

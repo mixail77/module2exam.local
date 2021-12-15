@@ -17,7 +17,9 @@ $this->layout('layout', [
     <div class="row">
         <div class="col-xl-12">
 
-            <a class="btn btn-success" href="/create/">Добавить</a>
+            <? if($auth->isAdmin()): ?>
+                <a class="btn btn-success" href="/create/">Добавить</a>
+            <? endif; ?>
 
             <div class="border-faded bg-faded p-3 mb-g d-flex mt-3">
                 <input type="text" id="js-filter-contacts" name="filter-contacts"
@@ -57,14 +59,17 @@ $this->layout('layout', [
                                         <i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>
                                         <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
                                     </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/"><i class="fa fa-user"></i> Профиль</a>
-                                        <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/edit/"><i class="fa fa-edit"></i>Редактировать</a>
-                                        <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/security/"><i class="fa fa-lock"></i>Безопасность</a>
-                                        <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/status/"><i class="fa fa-sun"></i>Установить статус</a>
-                                        <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/media/"><i class="fa fa-camera"></i>Загрузить аватар</a>
-                                        <a href="/profile/<?= $user['id'] ?>/delete/" class="dropdown-item" onclick="return confirm('Подтверждаете удаление?');"><i class="fa fa-window-close"></i>Удалить</a>
-                                    </div>
+
+                                    <? if($auth->checkAccessProfile($user['id'])): ?>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/"><i class="fa fa-user"></i> Профиль</a>
+                                            <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/edit/"><i class="fa fa-edit"></i>Редактировать</a>
+                                            <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/security/"><i class="fa fa-lock"></i>Безопасность</a>
+                                            <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/status/"><i class="fa fa-sun"></i>Установить статус</a>
+                                            <a class="dropdown-item" href="/profile/<?= $user['id'] ?>/media/"><i class="fa fa-camera"></i>Загрузить аватар</a>
+                                            <a href="/profile/<?= $user['id'] ?>/delete/" class="dropdown-item" onclick="return confirm('Подтверждаете удаление?');"><i class="fa fa-window-close"></i>Удалить</a>
+                                        </div>
+                                    <? endif; ?>
 
                                     <? if(!empty($user['job'])): ?>
                                         <span class="text-truncate text-truncate-xl"><?= $user['job'] ?></span>

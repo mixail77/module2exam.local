@@ -36,7 +36,7 @@ class MediaController extends BaseController
      * @return void
      * @throws QueryBuilderException
      */
-    public function postProfileMediaEdit($vars)
+    public function handlerProfileMedia($vars)
     {
 
         $this->checkAccess();

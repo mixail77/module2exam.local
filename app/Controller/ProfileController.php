@@ -57,7 +57,7 @@ class ProfileController extends BaseController
      * @return void
      * @throws QueryBuilderException
      */
-    public function postProfileEdit($vars)
+    public function handlerProfile($vars)
     {
 
         $this->checkAccess();
@@ -66,6 +66,9 @@ class ProfileController extends BaseController
         $job = $this->request->getPost('job');
         $phone = $this->request->getPost('phone');
         $address = $this->request->getPost('address');
+        $vk = $this->request->getPost('vk');
+        $instagram = $this->request->getPost('instagram');
+        $telegram = $this->request->getPost('telegram');
         $profileId = $this->request->getPost('profile_id');
 
         $arProfile = [
@@ -73,6 +76,9 @@ class ProfileController extends BaseController
             'job' => $job,
             'phone' => $phone,
             'address' => $address,
+            'vk' => $vk,
+            'instagram' => $instagram,
+            'telegram' => $telegram,
         ];
 
         $validator = new Validator($this->request->getAllPost());

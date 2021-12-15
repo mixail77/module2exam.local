@@ -17,7 +17,8 @@ class UsersController extends BaseController
         $users = $this->query->getAllUser();
 
         echo $this->engine->render('users.view', [
-            'users' => $users
+            'users' => $users,
+            'auth' => $this,
         ]);
 
     }

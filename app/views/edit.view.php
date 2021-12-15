@@ -42,6 +42,18 @@ $this->layout('layout', [
                                 <label class="form-label" for="simpleinput">Адрес</label>
                                 <input type="text" name="address" id="simpleinput" class="form-control" value="<?= $profile['address'] ?>">
                             </div>
+                            <div class="form-group">
+                                <label class="form-label" for="simpleinput">vk</label>
+                                <input type="text" name="vk" id="simpleinput" class="form-control" value="<?= $profile['vk'] ?>">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="simpleinput">instagram</label>
+                                <input type="text" name="instagram" id="simpleinput" class="form-control" value="<?= $profile['instagram'] ?>">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="simpleinput">telegram</label>
+                                <input type="text" name="telegram" id="simpleinput" class="form-control" value="<?= $profile['telegram'] ?>">
+                            </div>
                             <div class="col-md-12 mt-3 d-flex flex-row-reverse">
                                 <button class="btn btn-warning">Редактировать</button>
                             </div>

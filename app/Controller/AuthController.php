@@ -13,8 +13,6 @@ use Valitron\Validator;
 class AuthController extends BaseController
 {
 
-    private $duration;
-
     /**
      * Выводит форму авторизации
      * @return void
@@ -34,7 +32,7 @@ class AuthController extends BaseController
      * @throws AttemptCancelledException
      * @throws AuthError
      */
-    public function postAuth()
+    public function handlerAuth()
     {
 
         $this->checkAccess('guest');
@@ -81,11 +79,11 @@ class AuthController extends BaseController
 
             if ($remember === 'Y') {
 
-                $this->duration = (int)(60 * 60 * 24 * 365.25);
+                $duration = (int)(60 * 60 * 24 * 365.25);
 
             }
 
-            $this->auth->login($email, $password, $this->duration);
+            $this->auth->login($email, $password, $duration);
 
             return true;
 

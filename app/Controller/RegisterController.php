@@ -36,7 +36,7 @@ class RegisterController extends BaseController
      * @return void
      * @throws AuthError
      */
-    public function postRegister()
+    public function handlerRegister()
     {
 
         $this->checkAccess('guest');
@@ -185,7 +185,7 @@ class RegisterController extends BaseController
     }
 
     /**
-     * Обрабатывает запрос на подтверждение Email адреса пользователя
+     * Обрабатывает запрос на подтверждение Email адреса пользователя (ссылка в письме)
      * @return void
      * @throws AuthError
      */

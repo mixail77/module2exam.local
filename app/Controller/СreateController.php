@@ -28,7 +28,7 @@ class СreateController extends BaseController
      * Обрабатывает запрос на добавление пользователя
      * @return void
      */
-    public function postCreate()
+    public function handlerCreate()
     {
 
         $this->checkAccess();

@@ -51,30 +51,30 @@ $container = $containerBuilder->build();
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $rout) {
     //Авторизация
     $rout->addRoute('GET', '/', [AuthController::class, 'auth']);
-    $rout->addRoute('POST', '/', [AuthController::class, 'postAuth']);
+    $rout->addRoute('POST', '/', [AuthController::class, 'handlerAuth']);
     //Регистрация
     $rout->addRoute('GET', '/register/', [RegisterController::class, 'register']);
-    $rout->addRoute('POST', '/register/', [RegisterController::class, 'postRegister']);
+    $rout->addRoute('POST', '/register/', [RegisterController::class, 'handlerRegister']);
     $rout->addRoute('GET', '/confirm/', [RegisterController::class, 'confirmRegister']);
     //Список пользователей
     $rout->addRoute('GET', '/users/', [UsersController::class, 'users']);
     $rout->addRoute('GET', '/users/{id:[0-9]+}/', [UsersController::class, 'users']);
     //Добавить пользователя
     $rout->addRoute('GET', '/create/', [СreateController::class, 'create']);
-    $rout->addRoute('POST', '/create/', [СreateController::class, 'postCreate']);
+    $rout->addRoute('POST', '/create/', [СreateController::class, 'handlerCreate']);
     //Редактировать пользователя
     $rout->addRoute('GET', '/profile/{id:[0-9]+}/', [ProfileController::class, 'profile']);
     $rout->addRoute('GET', '/profile/{id:[0-9]+}/edit/', [ProfileController::class, 'profileEdit']);
-    $rout->addRoute('POST', '/profile/{id:[0-9]+}/edit/', [ProfileController::class, 'postProfileEdit']);
+    $rout->addRoute('POST', '/profile/{id:[0-9]+}/edit/', [ProfileController::class, 'handlerProfile']);
     //Загрузить аватар
     $rout->addRoute('GET', '/profile/{id:[0-9]+}/media/', [MediaController::class, 'profileMedia']);
-    $rout->addRoute('POST', '/profile/{id:[0-9]+}/media/', [MediaController::class, 'postProfileMediaEdit']);
+    $rout->addRoute('POST', '/profile/{id:[0-9]+}/media/', [MediaController::class, 'handlerProfileMedia']);
     //Установить статус
     $rout->addRoute('GET', '/profile/{id:[0-9]+}/status/', [StatusController::class, 'profileStatus']);
-    $rout->addRoute('POST', '/profile/{id:[0-9]+}/status/', [StatusController::class, 'postProfileStatusEdit']);
+    $rout->addRoute('POST', '/profile/{id:[0-9]+}/status/', [StatusController::class, 'handlerProfileStatus']);
     //Безопасность
     $rout->addRoute('GET', '/profile/{id:[0-9]+}/security/', [SecurityController::class, 'profileSecurity']);
-    $rout->addRoute('POST', '/profile/{id:[0-9]+}/security/', [SecurityController::class, 'postProfileSecurityEdit']);
+    $rout->addRoute('POST', '/profile/{id:[0-9]+}/security/', [SecurityController::class, 'handlerProfileSecurity']);
     //Удалить пользователя
     $rout->addRoute('GET', '/profile/{id:[0-9]+}/delete/', [DeleteController::class, 'profileDelete']);
     //Выход пользователя

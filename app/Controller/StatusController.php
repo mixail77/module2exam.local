@@ -44,7 +44,7 @@ class StatusController extends BaseController
      * @return void
      * @throws QueryBuilderException
      */
-    public function postProfileStatusEdit($vars)
+    public function handlerProfileStatus($vars)
     {
 
         $this->checkAccess();
