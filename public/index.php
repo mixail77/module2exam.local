@@ -58,7 +58,6 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $rou
     $rout->addRoute('GET', '/confirm/', [RegisterController::class, 'confirmRegister']);
     //Список пользователей
     $rout->addRoute('GET', '/users/', [UsersController::class, 'users']);
-    $rout->addRoute('GET', '/users/{id:[0-9]+}/', [UsersController::class, 'users']);
     //Добавить пользователя
     $rout->addRoute('GET', '/create/', [СreateController::class, 'create']);
     $rout->addRoute('POST', '/create/', [СreateController::class, 'handlerCreate']);

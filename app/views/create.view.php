@@ -25,19 +25,19 @@ $this->layout('layout', [
                         <div class="panel-content">
                             <div class="form-group">
                                 <label class="form-label" for="simpleinput">Имя</label>
-                                <input type="text" id="simpleinput" class="form-control">
+                                <input type="text" name="name" id="simpleinput" class="form-control" value="<?= $profile['name'] ?>">
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="simpleinput">Место работы</label>
-                                <input type="text" id="simpleinput" class="form-control">
+                                <input type="text" name="job" id="simpleinput" class="form-control" value="<?= $profile['job'] ?>">
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="simpleinput">Номер телефона</label>
-                                <input type="text" id="simpleinput" class="form-control">
+                                <input type="text" name="phone" id="simpleinput" class="form-control" value="<?= $profile['phone'] ?>">
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="simpleinput">Адрес</label>
-                                <input type="text" id="simpleinput" class="form-control">
+                                <input type="text" name="address" id="simpleinput" class="form-control" value="<?= $profile['address'] ?>">
                             </div>
                         </div>
                     </div>
@@ -52,23 +52,23 @@ $this->layout('layout', [
                         <div class="panel-content">
                             <div class="form-group">
                                 <label class="form-label" for="simpleinput">Email</label>
-                                <input type="text" id="simpleinput" class="form-control">
+                                <input type="text" name="email" id="simpleinput" class="form-control" value="<?= $profile['email'] ?>">
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="simpleinput">Пароль</label>
-                                <input type="password" id="simpleinput" class="form-control">
+                                <input type="password" name="password" id="simpleinput" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="example-select">Выберите статус</label>
-                                <select class="form-control" id="example-select">
-                                    <option>Онлайн</option>
-                                    <option>Отошел</option>
-                                    <option>Не беспокоить</option>
+                                <select class="form-control" id="example-select" name="status">
+                                    <? foreach($status as $value): ?>
+                                        <option value="<?= $value['id'] ?>" <?=($value['id'] == $profile['status']) ? 'selected' : ''?>><?= $value['info'] ?></option>
+                                    <? endforeach; ?>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="example-fileinput">Загрузить аватар</label>
-                                <input type="file" id="example-fileinput" class="form-control-file">
+                                <input type="file" name="photo" id="example-fileinput" class="form-control-file">
                             </div>
                         </div>
                     </div>
@@ -92,7 +92,7 @@ $this->layout('layout', [
                                                     </span>
                                                 </span>
                                         </div>
-                                        <input type="text" class="form-control border-left-0 bg-transparent pl-0">
+                                        <input type="text" name="vk" class="form-control border-left-0 bg-transparent pl-0" value="<?= $profile['vk'] ?>">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -105,7 +105,7 @@ $this->layout('layout', [
                                                     </span>
                                                 </span>
                                         </div>
-                                        <input type="text" class="form-control border-left-0 bg-transparent pl-0">
+                                        <input type="text" name="telegram" class="form-control border-left-0 bg-transparent pl-0" value="<?= $profile['telegram'] ?>">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -118,7 +118,7 @@ $this->layout('layout', [
                                                     </span>
                                                 </span>
                                         </div>
-                                        <input type="text" class="form-control border-left-0 bg-transparent pl-0">
+                                        <input type="text" name="instagram" class="form-control border-left-0 bg-transparent pl-0" value="<?= $profile['instagram'] ?>">
                                     </div>
                                 </div>
                                 <div class="col-md-12 mt-3 d-flex flex-row-reverse">

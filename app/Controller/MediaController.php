@@ -3,13 +3,10 @@
 namespace App\Controller;
 
 use App\Exception\QueryBuilderException;
-use Intervention\Image\ImageManager;
 use Valitron\Validator;
 
 class MediaController extends BaseController
 {
-
-    const PHOTO_TYPE = ['jpg', 'jpeg', 'png', 'gif'];
 
     /**
      * Выводит форму добавления фотографии
@@ -49,7 +46,7 @@ class MediaController extends BaseController
 
         if (!$validator->validate() || !$this->mediaValidator($arPhoto)) {
 
-            $this->flash->error('Ошибка валидации');
+            $this->flash->error('Выберите фотографию');
 
         } else {
 
@@ -64,54 +61,6 @@ class MediaController extends BaseController
             'profile' => $arProfile,
             'user_id' => $vars['id'],
         ]);
-
-    }
-
-    /**
-     * Проверяет загружаемую фотографию
-     * @param $arPhoto
-     * @return bool
-     */
-    public function mediaValidator($arPhoto)
-    {
-
-        if (empty($arPhoto) || $arPhoto['error'] !== 0) {
-
-            return false;
-
-        } else {
-
-            //Тип файла
-            $arExtension = pathinfo($arPhoto['name'], PATHINFO_EXTENSION);
-
-            if (!in_array($arExtension, self::PHOTO_TYPE)) {
-
-                return false;
-
-            }
-
-        }
-
-        return true;
-
-    }
-
-    /**
-     * Загружает и сохраняет новую фотографию
-     * @param $arPhoto
-     * @return string
-     */
-    public function addPhoto($arPhoto)
-    {
-
-        $manager = new ImageManager(['driver' => 'imagick']);
-        $image = $manager->make($arPhoto['tmp_name']);
-
-        $photoPath = '/upload/photo/' . mb_strtolower(mt_rand(0, 10000) . $arPhoto['name']);
-
-        $image->save($_SERVER['DOCUMENT_ROOT'] . '/public/' . $photoPath);
-
-        return $photoPath;
 
     }
 

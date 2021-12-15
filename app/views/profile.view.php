@@ -10,7 +10,7 @@ $this->layout('layout', [
 <main id="js-page-content" role="main" class="page-content mt-3">
     <div class="subheader">
         <h1 class="subheader-title">
-            <i class='subheader-icon fal fa-user'></i> Иван Иванов
+            <i class='subheader-icon fal fa-user'></i> <?= $profile['name'] ?>
         </h1>
     </div>
     <div class="row">

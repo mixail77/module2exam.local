@@ -16,8 +16,6 @@ use Valitron\Validator;
 class RegisterController extends BaseController
 {
 
-    const STATUS_DEFAULT = 4;
-
     /**
      * Выводит форму регистрации
      * @return void
@@ -69,123 +67,7 @@ class RegisterController extends BaseController
     }
 
     /**
-     * Регистрирует нового пользователя
-     * @return bool
-     * @throws AuthError
-     */
-    private function createUser($email, $password)
-    {
-
-        try {
-
-            $userId = $this->auth->register($email, $password, '', function ($selector, $token) use ($email) {
-
-                //Отправляем ссылку на подтверждение
-                $this->sendConfirm($selector, $token, $email);
-            });
-
-            //Добавляем профиль пользователя
-            $this->createProfile($userId);
-
-            return true;
-
-        } catch (InvalidEmailException $exception) {
-
-            $this->flash->error('Ошибка. Неверный E-mail');
-
-        } catch (InvalidPasswordException $exception) {
-
-            $this->flash->error('Ошибка. Неверный пароль');
-
-        } catch (UserAlreadyExistsException $exception) {
-
-            $this->flash->error('Ошибка. Пользователь уже существует');
-
-        } catch (TooManyRequestsException $exception) {
-
-            $this->flash->error('Ошибка. Слишком много запросов');
-
-        }
-
-        return false;
-
-    }
-
-    /**
-     * Отправляет ссылку для подтверждения регистрации пользователя
-     * @return bool
-     */
-    private function sendConfirm($selector, $token, $email)
-    {
-
-        try {
-
-            $confirmUrl = 'http://' . $this->request->getServer('SERVER_NAME') . '/confirm/?selector=' . $selector . '&token=' . $token;
-            $message = 'Подтверждение регистрации: ' . $confirmUrl;
-
-            $this->mail->setTo($email, $email);
-            $this->mail->setFrom('confirm@yandex.ru', 'confirm@yandex.ru');
-            $this->mail->setSubject('Подтверждение регистрации');
-            $this->mail->setMessage($message);
-            $this->mail->send();
-
-            return true;
-
-        } catch (RuntimeException $exception) {
-
-            $this->flash->error('Ошибка. Не отправлено письмо для активации учетной записи');
-
-        }
-
-        return false;
-
-    }
-
-    /**
-     * Создает профиль пользователя
-     * @return bool
-     */
-    private function createProfile($userId)
-    {
-
-        $name = $this->request->getPost('name');
-        $phone = $this->request->getPost('phone');
-        $address = $this->request->getPost('address');
-        $job = $this->request->getPost('job');
-        $photo = $this->request->getPost('photo');
-        $vk = $this->request->getPost('vk');
-        $instagram = $this->request->getPost('instagram');
-        $telegram = $this->request->getPost('telegram');
-
-        try {
-
-            $this->query->create('profile', [
-                'user_id' => $userId,
-                'name' => $name,
-                'phone' => $phone,
-                'address' => $address,
-                'job' => $job,
-                'photo' => $photo,
-                'vk' => $vk,
-                'instagram' => $instagram,
-                'telegram' => $telegram,
-                'status_id' => self::STATUS_DEFAULT,
-            ]);
-
-            return true;
-
-        } catch (QueryBuilderException $exception) {
-
-            $this->flash->error('Ошибка. Не создан профиль пользователя');
-
-        }
-
-        return false;
-
-    }
-
-    /**
-     * Обрабатывает запрос на подтверждение Email адреса пользователя (ссылка в письме)
+     * Обрабатывает запрос на подтверждение Email адреса пользователя (по ссылке в письме)
      * @return void
      * @throws AuthError
      */

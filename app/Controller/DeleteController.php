@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Exception\QueryBuilderException;
 use Delight\Auth\AuthError;
 use Delight\Auth\UnknownIdException;
 
@@ -11,7 +12,7 @@ class DeleteController extends BaseController
     /**
      * Обрабатывает запрос на удаление пользователя
      * @return void
-     * @throws AuthError
+     * @throws AuthError|QueryBuilderException
      */
     public function profileDelete($vars)
     {
@@ -34,7 +35,7 @@ class DeleteController extends BaseController
      * Удаляет пользователя по ID
      * @param $userId
      * @return bool
-     * @throws AuthError
+     * @throws AuthError|QueryBuilderException
      */
     public function deleteUser($userId)
     {
