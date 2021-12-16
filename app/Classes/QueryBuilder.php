@@ -256,6 +256,7 @@ class QueryBuilder
         $select->from('status');
         $select->where('profile.user_id = users.id');
         $select->where('status.id = profile.status_id');
+        $select->orderBy(['id DESC']);
 
         //Подготавливаем запрос
         $sql = $select->getStatement();

@@ -21,7 +21,7 @@ class ProfileController extends BaseController
         //Пользователь
         $arUser = $this->query->getById('users', $vars['id']);
 
-        //Получаем профиль пользователя по ID пользователя
+        //Профиль пользователя
         $arProfile = $this->query->getProfileByUserId('profile', $vars['id']);
 
         echo $this->engine->render('profile.view', [
@@ -42,7 +42,7 @@ class ProfileController extends BaseController
 
         $this->checkAccess();
 
-        //Получаем профиль пользователя по ID пользователя
+        //Профиль пользователя
         $arProfile = $this->query->getProfileByUserId('profile', $vars['id']);
 
         echo $this->engine->render('edit.view', [

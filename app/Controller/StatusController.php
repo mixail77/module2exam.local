@@ -18,10 +18,10 @@ class StatusController extends BaseController
 
         $this->checkAccess();
 
-        //Получаем список доступных статусов
+        //Список статусов
         $arStatus = $this->query->getAll('status');
 
-        //Получаем профиль пользователя по ID пользователя
+        //Профиль пользователя
         $arProfile = $this->query->getProfileByUserId('profile', $vars['id']);
 
         echo $this->engine->render('status.view', [
@@ -43,12 +43,11 @@ class StatusController extends BaseController
         $this->checkAccess();
 
         $profileId = $this->request->getPost('profile_id');
+        $statusId = $this->request->getPost('status_id');
 
         $arProfile = [
-            'status_id' => $this->request->getPost('status_id'),
+            'status_id' => $statusId,
         ];
-
-        $arStatus = $this->query->getAll('status');
 
         $validator = new Validator($this->request->getAllPost());
         $validator->rule('required', ['profile_id']);
@@ -65,6 +64,9 @@ class StatusController extends BaseController
             $this->flash->success('Данные сохранены');
 
         }
+
+        //Список статусов
+        $arStatus = $this->query->getAll('status');
 
         $arProfile['id'] = $profileId;
 

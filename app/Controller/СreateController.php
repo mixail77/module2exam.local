@@ -19,7 +19,7 @@ class СreateController extends BaseController
 
         $this->checkAccess();
 
-        //Получаем список доступных статусов
+        //Список статусов
         $arStatus = $this->query->getAll('status');
 
         echo $this->engine->render('create.view', [
@@ -61,9 +61,6 @@ class СreateController extends BaseController
             'telegram' => $telegram,
         ];
 
-        //Получаем список доступных статусов
-        $arStatus = $this->query->getAll('status');
-
         $validator = new Validator($this->request->getAllPost());
         $validator->rule('required', ['email', 'password']);
         $validator->rule('email', 'email');
@@ -89,6 +86,9 @@ class СreateController extends BaseController
             }
 
         }
+
+        //Список статусов
+        $arStatus = $this->query->getAll('status');
 
         echo $this->engine->render('create.view', [
             'profile' => $arProfile,

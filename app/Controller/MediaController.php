@@ -18,7 +18,7 @@ class MediaController extends BaseController
 
         $this->checkAccess();
 
-        //Получаем профиль пользователя по ID пользователя
+        //Профиль пользователя
         $arProfile = $this->query->getProfileByUserId('profile', $vars['id']);
 
         echo $this->engine->render('media.view', [
@@ -55,6 +55,7 @@ class MediaController extends BaseController
             $this->flash->success('Данные сохранены');
         }
 
+        //Профиль пользователя
         $arProfile = $this->query->getProfileByUserId('profile', $vars['id']);
 
         echo $this->engine->render('media.view', [

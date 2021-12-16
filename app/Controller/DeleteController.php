@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Exception\QueryBuilderException;
 use Delight\Auth\AuthError;
-use Delight\Auth\UnknownIdException;
 
 class DeleteController extends BaseController
 {
@@ -26,8 +25,6 @@ class DeleteController extends BaseController
         }
 
         $this->redirect->redirectTo();
-
-        echo $this->engine->render('delete.view', []);
 
     }
 
